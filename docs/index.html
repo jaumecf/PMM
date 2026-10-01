@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PMDM - Programació Multimèdia i Dispositius Mòbils</title>
+    <style>
+        :root {
+            --primary-color: #02569B;
+            --secondary-color: #0175C2;
+            --accent-color: #13B9FD;
+            --bg-color: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-color: #202124;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 { margin: 0 0 10px 0; font-size: 2.5rem; }
+        p.subtitle { margin: 0; font-size: 1.2rem; opacity: 0.9; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            color: #5f6368;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 15px;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Programació Multimèdia i Dispositius Mòbils</h1>
+            <p class="subtitle">Desenvolupament de temaris amb Flutter i Dart</p>
+        </header>
+
+        <div class="modules-grid">
+            <!-- Tema 1 -->
+            <div class="card">
+                <div>
+                    <h2>Tema 1: Introducció a Flutter i Dart</h2>
+                    <p>Sintaxi de Dart, Null Safety, programació orientada a objectes i asincronia com a preparació per al desenvolupament amb Flutter.</p>
+                </div>
+                <a href="tema_1.html" class="btn">Accedir al Tema 1</a>
+            </div>
+
+            <!-- Tema 2 -->
+            <div class="card">
+                <div>
+                    <h2>Tema 2: Components bàsics</h2>
+                    <p>Introducció als Widgets, disseny d'interfícies d'usuari amb Material 3, maquetació i gestió bàsica d'esdeveniments.</p>
+                </div>
+                <a href="#" class="btn" style="opacity:0.6; pointer-events:none;">En construcció</a>
+            </div>
+
+            <!-- Tema 3 -->
+            <div class="card">
+                <div>
+                    <h2>Tema 3: Pub.dev i gestió d'estats</h2>
+                    <p>Ús de llibreries externes de Pub.dev i patrons de gestió d'estat (Provider, Riverpod o BLoC) per a aplicacions escalables.</p>
+                </div>
+                <a href="#" class="btn" style="opacity:0.6; pointer-events:none;">En construcció</a>
+            </div>
+
+            <!-- Tema 4 -->
+            <div class="card">
+                <div>
+                    <h2>Tema 4: Persistència</h2>
+                    <p>Emagatzematge de dades local i en el núvol utilitzant SharedPreferences, bases de dades SQLite/Isar i integració amb APIs/Firebase.</p>
+                </div>
+                <a href="#" class="btn" style="opacity:0.6; pointer-events:none;">En construcció</a>
+            </div>
+
+            <!-- Tema 5 -->
+            <div class="card">
+                <div>
+                    <h2>Tema 5: Projecte</h2>
+                    <p>Desenvolupament d'una aplicació multiplataforma completa aplicant bones pràctiques d'arquitectura, proves i publicació.</p>
+                </div>
+                <a href="#" class="btn" style="opacity:0.6; pointer-events:none;">En construcció</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

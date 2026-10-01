@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema 1: Introducció i Fonaments de Dart - PMDM</title>
+    
+    <!-- Highlight.js amb el tema VS Code Dark Plus (vs2015) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <style>
+        :root {
+            --primary-color: #02569B;
+            --secondary-color: #0175C2;
+            --accent-color: #13B9FD;
+            --bg-color: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-color: #202124;
+            --border-color: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav-back:hover { text-decoration: underline; }
+
+        h1 { color: var(--primary-color); border-bottom: 3px solid var(--accent-color); padding-bottom: 10px; }
+        h2 { 
+            color: white; 
+            background-color: var(--primary-color); 
+            padding: 10px 15px; 
+            border-radius: 6px; 
+            margin-top: 40px; 
+        }
+        h3 { color: var(--secondary-color); margin-top: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+
+        ul, ol { margin-bottom: 20px; }
+        li { margin-bottom: 8px; }
+
+        .info-box {
+            background-color: #E3F2FD;
+            border-left: 5px solid var(--secondary-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background-color: #FFF3E0;
+            border-left: 5px solid #E65100;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        pre {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin: 20px 0;
+        }
+
+        code {
+            font-family: 'Cascadia Code', 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        p code, li code {
+            background-color: #F1F3F4;
+            color: #C7254E;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #F5F5F5;
+            color: var(--primary-color);
+        }
+
+        .resources-list a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .resources-list a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="nav-back">&larr; Tornar a l'índex general</a>
+    
+    <h1>Tema 1: Introducció i Fonaments de Dart</h1>
+    <p><em>Mòdul: Programació Multimèdia i Dispositius Mòbils (PMDM)</em></p>
+
+    <!-- ==========================================
+         BLOC 1: INTRODUCCIÓ, CONTEXT I ENLLAÇOS
+         ========================================== -->
+    <section>
+        <h2>Bloc 1: Context, Objectius i Recursos</h2>
+        
+        <h3>1.1. Context Històric: Què és Dart i per què existeix?</h3>
+        <p>
+            <strong>Dart</strong> és un llenguatge de programació orientat a objectes, basat en classes i desenvolupat per <strong>Google</strong>. 
+            Es va presentar l'any 2011 amb l'objectiu inicial de ser un successor del clàssic JavaScript al navegador. Tanmateix, la seva autèntica revolució va arribar el 2018 quan es va convertir en el motor essencial de <strong>Flutter</strong>.
+        </p>
+        
+        <div class="info-box">
+            <strong>Per què Flutter utilitza Dart?</strong>
+            <ul>
+                <li><strong>Compilació doble (JIT i AOT):</strong> Durant el desenvolupament utilitza compilació <em>Just-In-Time</em> per permetre el <strong>Hot Reload</strong> (veure canvis a la pantalla en mil·lisegons). Per a producció, compila <em>Ahead-Of-Time</em> a codi màquina natiu (ARM/x86) d'alta velocitat.</li>
+                <li><strong>Llenguatge orientat a la interfície d'usuari:</strong> Està optimitzat per a la creació d'interfícies fluides a 60/120 fps.</li>
+                <li><strong>Estructura familiar:</strong> Té una sintaxi molt similar a Java, C# o TypeScript, fet que redueix la corba d'aprenentatge.</li>
+            </ul>
+        </div>
+
+        <h3>1.2. Objectius del Tema</h3>
+        <ul>
+            <li>Comprendre l'arquitectura i el propòsit del llenguatge Dart dins l'ecosistema mòbil.</li>
+            <li>Dominar la declaració de variables, la seguretat de nuls (Null Safety), les col·leccions bàsiques i la gestió de la memòria.</li>
+            <li>Aplicar les estructures de control, la programació orientada a objectes i la programació asíncrona.</li>
+            <li>Identificar les sintaxis clau de Dart que s'utilitzen diàriament en la creació de ginys (Widgets) a Flutter.</li>
+        </ul>
+
+        <h3>1.3. Enllaços i Recursos Oficials</h3>
+        <ul class="resources-list">
+            <li><a href="https://dart.dev" target="_blank">Documentació Oficial de Dart</a></li>
+            <li><a href="https://dartpad.dev/" target="_blank">DartPad (Editor interactiu en línia)</a></li>
+            <li><a href="https://flutter.dev/" target="_blank">Lloc Oficial de Flutter</a></li>
+            <li><a href="https://github.com/jaumecf/learningDart/tree/main/IntroduccioDart" target="_blank">Repositori GitHub de la classe (IntroduccioDart)</a></li>
+        </ul>
+    </section>
+
+    <!-- ==========================================
+         BLOC 2: VARIABLES, TIPATS I NULL SAFETY
+         ========================================== -->
+    <section>
+        <h2>Bloc 2: Variables, Tipats, Col·leccions i Null Safety</h2>
+
+        <h3>2.1. Tipats Primitius i Declaració (Explícita vs Inferida)</h3>
+        <p>En Dart tot és un objecte (inclosos els números i booleans). Podem declarar tipus de manera explícita o deixar que el compilador infereixi el tipus amb <code>var</code>.</p>
+
+<pre><code class="language-dart">void main() {
+  // 1. Declaració Explícita
+  int edat = 22;
+  double preu = 19.99;
+  String nom = "Laura";
+  bool actiu = true;
+
+  // 2. Inferència de Tipus (var)
+  var cicle = "DAM/DAM-PMDM"; // El compilador infereix que és String
+  // cicle = 123; // ERROR! No es pot canviar el tipus un cop inferit.
+
+  // 3. Conversió de tipus (Parsing)
+  int textANumero = int.parse('42');
+  String numeroAText = 100.toString();
+
+  print("Alumne/a: $nom, Edat: $edat, Curs:$cicle");
+}</code></pre>
+
+        <h3>2.2. Flexibilitat i Mutabilitat: var, final i const</h3>
+        <p>És clau entendre com es gestionen les referències de memòria en Dart:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Paraula Clau</th>
+                    <th>Referència (Caixa)</th>
+                    <th>Contingut (Valor)</th>
+                    <th>Moment d'assignació</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>var</code></td>
+                    <td>Reassignable</td>
+                    <td>Modificable</td>
+                    <td>Temps d'execució</td>
+                </tr>
+                <tr>
+                    <td><code>final</code></td>
+                    <td>Immodificable (Caixa tancada)</td>
+                    <td>Modificable</td>
+                    <td>Temps d'execució (Runtime)</td>
+                </tr>
+                <tr>
+                    <td><code>const</code></td>
+                    <td>Immodificable (Congelada)</td>
+                    <td>Immodificable</td>
+                    <td>Temps de compilació (Compile-time)</td>
+                </tr>
+            </tbody>
+        </table>
+
+<pre><code class="language-dart">void main() {
+  var l1 = [1, 2];
+  l1 = [3, 4];   // OK: canviem la referència
+  l1.add(5);     // OK: modifiquem el contingut
+
+  final l2 = [1, 2];
+  // l2 = [3, 4]; // ERROR! No es pot canviar la referència
+  l2.add(5);      // OK: es pot modificar el contingut
+
+  const l3 = [1, 2];
+  // l3 = [3, 4]; // ERROR!
+  // l3.add(5);   // ERROR! Llista congelada en temps de compilació
+}</code></pre>
+
+        <h3>2.3. Interpolació de Cadenes (String Interpolation)</h3>
+        <p>S'utilitza el símbol <code>$</code> per a variables simples i <code>${}</code> per avaluar expressions complexes:</p>
+
+<pre><code class="language-dart">String producte = "Mòbil";
+double preuUnitari = 250.0;
+int quantitat = 2;
+
+// Interpolació directa i d'expressions
+print("Producte: $producte");
+print("Total: ${preuUnitari * quantitat} €");</code></pre>
+
+        <h3>2.4. Estructures de Dades / Col·leccions Bàsiques</h3>
+        <p>En Flutter treballem constantment amb llistes i mapes per gestionar dades dinàmiques i estructures JSON.</p>
+
+<pre><code class="language-dart">void main() {
+  // 1. List (Llistes ordenades)
+  List&lt;String&gt; fruites = ['Poma', 'Plàtan'];
+  fruites.add('Taronja');
+
+  // Mètodes funcionals de col·leccions (map, where)
+  var filtrades = fruites.where((f) => f.startsWith('P')).toList();
+
+  // 2. Map (Clau-Valor, equivalent a JSON)
+  Map&lt;String, dynamic&gt; usuari = {
+    'id': 1,
+    'nom': 'Enric',
+    'edat': 25,
+  };
+
+  print("Nom d'usuari: ${usuari['nom']}");
+}</code></pre>
+
+        <h3>2.5. Referències a Memòria i Còpies d'Objectes (Punters)</h3>
+        <p>
+            En Dart <strong>tot és un objecte</strong>. Quan declarem una variable, aquesta no conté directament les dades en el seu interior, sinó una <strong>referència</strong> (un punter) a l'adreça de memòria on resideix l'objecte (a la memòria <em>Heap</em>).
+        </p>
+
+        <div class="warning-box">
+            <strong>Concepte Clau: Pas per Referència</strong><br>
+            Si assignem una variable de tipus complex (com una <code>List</code>, un <code>Map</code> o una instància d'una <code>Class</code>) a una altra variable, <strong>no s'està duplicant la informació</strong>: totes dues variables apunten exactament a la mateixa adreça de memòria.
+        </div>
+
+<pre><code class="language-dart">void main() {
+  // 1. Assignació per referència (Apuntador a la mateixa adreça de memòria)
+  List&lt;String&gt; originals = ['Poma', 'Plàtan'];
+  List&lt;String&gt; mateixaLlista = originals; // Copia la referència, NO les dades!
+
+  mateixaLlista.add('Taronja');
+
+  // Com que apunten a la mateixa adreça, totes dues variables es veuen modificades:
+  print(originals);     // Sortida: ['Poma', 'Plàtan', 'Taronja']
+  print(mateixaLlista); // Sortida: ['Poma', 'Plàtan', 'Taronja']
+
+  // 2. Com fer una CÒPIA REAL (Creació d'un nou objecte en memòria)
+  // Utilitzam el constructor de còpia o el Spread Operator (...)
+  List&lt;String&gt; copiaReal = List.from(originals);
+  // També vàlid: List&lt;String&gt; copiaReal = [...originals];
+
+  copiaReal.add('Llimona');
+
+  print(originals); // Es manté intacta: ['Poma', 'Plàtan', 'Taronja']
+  print(copiaReal);  // Nova adreça de memòria: ['Poma', 'Plàtan', 'Taronja', 'Llimona']
+}</code></pre>
+
+        <h3>2.6. Null Safety a Fons</h3>
+        <p>Per defecte, cap variable pot contenir el valor <code>null</code>. Això garanteix un codi segur i evita fallades en temps d'execució.</p>
+
+<pre><code class="language-dart">void main() {
+  String obligatori = "Hola"; // No pot ser null
+
+  // Operador '?' per permetre nuls
+  String? opcional = null;
+
+  // Operador '?.' (Navegació segura)
+  print(opcional?.length); // Imprimeix null sense llançar cap excepció
+
+  // Operador '??' (Valor per defecte)
+  String nomFinal = opcional ?? "Usuari Anònim";
+
+  // Operador '??=' (Assignació si és null)
+  opcional ??= "Valor Assignat";
+
+  // Operador '!' (Forçar no-nul·litat - atenció: utilitzar amb precaució)
+  print(opcional!.toUpperCase());
+}</code></pre>
+    </section>
+
+    <!-- ==========================================
+         BLOC 3: POO, ASINCRONIA I PRIMER COP D'ULL A FLUTTER
+         ========================================== -->
+    <section>
+        <h2>Bloc 3: POO, Asincronia i Enllaç amb Flutter</h2>
+
+        <h3>3.1. Estructures de Control i Expressions Idiomàtiques</h3>
+<pre><code class="language-dart">void main() {
+  bool teAcces = true;
+
+  // Operador Ternari
+  String estat = teAcces ? "Accés Permès" : "Accés Denegat";
+
+  // Collection If i Spread Operator (...) en llistes
+  List&lt;String&gt; opcionsBase = ['Inici', 'Perfil'];
+  List&lt;String&gt; menu = [
+    ...opcionsBase,
+    if (teAcces) 'Panell d\'Administració',
+  ];
+
+  print(menu); // ['Inici', 'Perfil', 'Panell d\'Administració']
+}</code></pre>
+
+        <h3>3.2. Funcions i Paràmetres Nombrats</h3>
+        <p>Aquest punt és <strong>fonamental</strong> per entendre la creació de ginys (Widgets) a Flutter.</p>
+
+<pre><code class="language-dart">// Funció amb paràmetres nombrats ({}) i opcions requerides (required)
+void crearTargeta({
+  required String titol,
+  String? subtitol,
+  double elevacio = 2.0,
+}) {
+  print("Targeta: $titol ($subtitol) - Elevació: $elevacio");
+}
+
+void main() {
+  // Cridem la funció indicant el nom dels paràmetres en qualsevol ordre
+  crearTargeta(
+    subtitol: "Detalls del producte",
+    titol: "Samarreta Base",
+  );
+}</code></pre>
+
+        <h3>3.3. Classes, Constructors Nombrats i Mixins</h3>
+<pre><code class="language-dart">// Mixin per reusar funcionalitat
+mixin Loggable {
+  void log(String msg) => print("[LOG]: $msg");
+}
+
+class Persona {
+  String nom;
+  int edat;
+
+  // Constructor directament simplificat
+  Persona({required this.nom, required this.edat});
+
+  // Constructor Nombrat
+  Persona.senseEdat(String nom) : this(nom: nom, edat: 0);
+}
+
+// Herència i ús del Mixin
+class Estudiant extends Persona with Loggable {
+  String cicle;
+
+  Estudiant({
+    required String nom,
+    required int edat,
+    required this.cicle,
+  }) : super(nom: nom, edat: edat);
+
+  void mostrarDades() {
+    log("Estudiant de $cicle:$nom");
+  }
+}</code></pre>
+
+        <h3>3.4. Programació Asíncrona (`Future` i `async/await`)</h3>
+<pre><code class="language-dart">// Simula una petició a una API externa
+Future&lt;String&gt; carregarUsuari() async {
+  await Future.delayed(Duration(seconds: 2)); // Espera asíncrona
+  return "Joan Garcia";
+}
+
+void main() async {
+  print("Carregant dades...");
+  String nom = await carregarUsuari();
+  print("Usuari carregat: $nom");
+}</code></pre>
+
+        <h3>3.5. Primer cop d'ull: Com es tradueix tot això a Flutter?</h3>
+        <p>Observeu aquest exemple de codi real de Flutter. Fixeu-vos en com <strong>tots</strong> els conceptes que acabem d'aprendre en Dart es combinen per crear la interfície d'usuari:</p>
+
+<pre><code class="language-dart">// Exemple de codi en Flutter (Vista prèvia)
+Widget construirPerfilUsuari(bool esVIP) {
+  return Container(
+    padding: EdgeInsets.all(16.0), // Paràmetre nombrat
+    child: Column(
+      children: [
+        Text(
+          esVIP ? "Usuari VIP" : "Usuari Estàndard", // Ternari
+          style: TextStyle(fontSize: 20.0),
+        ),
+        if (esVIP) Icon(Icons.star), // Collection If
+      ],
+    ),
+  );
+}</code></pre>
+    </section>
+</div>
+
+</body>
+</html>
