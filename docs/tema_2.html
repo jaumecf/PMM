@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema 2: Flutter com a Framework, Entorn i Components Bàsics - PMDM</title>
+    <style>
+        :root {
+            --primary: #6750A4;
+            --on-primary: #FFFFFF;
+            --primary-container: #EADDFF;
+            --on-primary-container: #21005D;
+            --secondary: #625B71;
+            --surface: #FEF7FF;
+            --on-surface: #1D1B20;
+            --surface-variant: #E7E0EC;
+            --outline: #79747E;
+            --code-bg: #1E1E2E;
+            --code-color: #CDD6F4;
+            --accent-blue: #02569B;
+            --accent-cyan: #01B5D8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #F4F0F8;
+            color: var(--on-surface);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-container);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.3rem;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.15rem;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--on-primary-container);
+            background-color: var(--primary-container);
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 1.45rem;
+            margin-top: 40px;
+        }
+
+        h3 {
+            color: var(--primary);
+            font-size: 1.25rem;
+            margin-top: 25px;
+            border-bottom: 2px solid var(--surface-variant);
+            padding-bottom: 6px;
+        }
+
+        p, li {
+            font-size: 1rem;
+            color: #2D2D2D;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+        }
+
+        .info-box {
+            background-color: #F0F4FF;
+            border-left: 5px solid var(--accent-cyan);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background-color: #FFF4E5;
+            border-left: 5px solid #FF9800;
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        /* Animated Graphic for Stateless vs Stateful */
+        .widget-comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 768px) {
+            .widget-comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .widget-card {
+            border: 2px solid var(--surface-variant);
+            border-radius: 12px;
+            padding: 20px;
+            background: #FAFAFA;
+            text-align: center;
+        }
+
+        .widget-card.stateful {
+            border-color: var(--primary);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status-immutable { background: #E0E0E0; color: #424242; }
+        .status-mutable { background: var(--primary-container); color: var(--on-primary-container); }
+
+        .interactive-demo {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .pulse-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .pulse-btn:active {
+            transform: scale(0.95);
+        }
+
+        .rebuild-animation {
+            animation: flashHighlight 1s ease-in-out;
+        }
+
+        @keyframes flashHighlight {
+            0% { background-color: #EADDFF; }
+            50% { background-color: #FFB4AB; }
+            100% { background-color: #FFFFFF; }
+        }
+
+        /* Grid Layout per a Widgets & Previews */
+        .widget-block {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 20px;
+            margin-bottom: 35px;
+            background: var(--surface);
+            border: 1px solid var(--surface-variant);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        @media (max-width: 850px) {
+            .widget-block {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .widget-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-color);
+            padding: 14px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #EAE6F0;
+            padding: 2px 5px;
+            border-radius: 4px;
+            color: var(--on-primary-container);
+            font-size: 0.92em;
+        }
+
+        /* Mockups Visuals de Mòbil */
+        .phone-mockup {
+            width: 260px;
+            height: 380px;
+            background-color: #121212;
+            border-radius: 28px;
+            padding: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            margin: auto;
+            box-sizing: border-box;
+        }
+
+        .screen {
+            background-color: #FFFFFF;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            font-family: sans-serif;
+        }
+
+        .app-bar-mock {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 14px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .screen-body {
+            padding: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #FAF8FC;
+            overflow-y: auto;
+        }
+
+        /* Element UI reutilitzables per a previews */
+        .mock-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+            display: inline-block;
+            margin: 2px;
+        }
+        .mock-btn-elevated { background: #6750A4; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .mock-btn-filled { background: #6750A4; color: white; }
+        .mock-btn-tonal { background: #EADDFF; color: #21005D; }
+        .mock-btn-outlined { border: 1px solid #79747E; color: #6750A4; }
+
+        .list-item-mock {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            border-bottom: 1px solid #eee;
+            gap: 10px;
+        }
+        .avatar-mock {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #EADDFF;
+            color: #21005D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        /* Taula d'Arbres */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid var(--surface-variant);
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: var(--primary-container);
+            color: var(--on-primary-container);
+            font-weight: bold;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #FDFBFF;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="badge">PMDM - Desenvolupament Mòbil</span>
+        <h1>Tema 2: Flutter com a Framework, Entorn i Components Bàsics</h1>
+        <p class="subtitle">Estructura del framework, arquitectura d'arbres, Material 3 i catàleg de Widgets bàsics</p>
+    </header>
+
+    <!-- SECCIÓ 1: RESUM TEÒRIC INICIAL -->
+    <section>
+        <h2>1. Resum Teòric: Framework i Arquitectura</h2>
+        
+        <h3>Què és Flutter?</h3>
+        <p>Flutter és un framework de codi obert creat per Google per desenvolupar aplicacions natives multiplataforma (Android, iOS, Web, Desktop) des d'una <strong>única base de codi</strong>.</p>
+        <ul>
+            <li><strong>Llenguatge:</strong> Utilitza <strong>Dart</strong>, un llenguatge orientat a objectes, fortament tipat i optimitzat per a la creació d'interfícies ràpides.</li>
+            <li><strong>Hot Reload:</strong> Permet veure els canvis en el codi de manera immediata (sub-segon) sense perdre l'estat actual de l'aplicació.</li>
+            <li><strong>Control total de píxels:</strong> Flutter no utilitza els widgets natius del sistema operatiu; dibuixa directament la interfície en pantalla utilitzant el seu propi motor de renderitzat d'alt rendiment (<strong>Impeller</strong> a les darreres versions / <strong>Skia</strong>).</li>
+        </ul>
+
+        <h3>Arquitectura interna d'arbres (Trees)</h3>
+        <p>Flutter gestiona la interfície d'usuari de manera extremadament eficient dividint-la en tres arbres paral·lels:</p>
+        <ul>
+            <li><strong>Widget Tree:</strong> La configuració immutable de la UI ("el que volem veure").</li>
+            <li><strong>Element Tree:</strong> El lligam estructural entre el Widget i el seu estat. És la referència real de la vista i gestiona el <code>BuildContext</code>.</li>
+            <li><strong>RenderObject Tree:</strong> L'arbre encarregat de calcular posicions, mides i pintar realment els píxels en pantalla.</li>
+        </ul>
+
+        <h3>StatelessWidget vs StatefulWidget</h3>
+        <p>La gestió de la interfície es divideix segons si els components han de canviar dinàmicament o no:</p>
+
+        <div class="widget-comparison-grid">
+            <div class="widget-card">
+                <span class="status-badge status-immutable">Immutable (Sense Estat)</span>
+                <h4>StatelessWidget</h4>
+                <p>Widgets la interfície dels quals <strong>no canvia</strong> en temps d'execució una vegada construïts (ex. un text fix, una icona o un botó estàtic).</p>
+                <div class="interactive-demo">
+                    <p style="font-size: 0.85rem; color: #666;">Exemple: Icona + Text</p>
+                    <span style="font-size: 1.5rem;">🔒 <code>Text('Hola')</code></span>
+                </div>
+            </div>
+
+            <div class="widget-card stateful">
+                <span class="status-badge status-mutable">Dinàmic (Amb Estat)</span>
+                <h4>StatefulWidget</h4>
+                <p>Widgets que tenen un objecte <code>State</code> associat. Poden re-dibuixar-se en temps d'execució quan les dades canvien mitjançant la crida a <code>setState()</code>.</p>
+                <div class="interactive-demo" id="statefulDemoBox">
+                    <p style="font-size: 0.85rem; color: #666;">Comptador actiu: <strong id="counterVal">0</strong></p>
+                    <button class="pulse-btn" onclick="incrementCounter()">setState() ➕</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 2: FILOSOFIA LEGO -->
+    <section>
+        <h2>2. La Filosofia de Flutter: "Everything is a Widget"</h2>
+        <p>A diferència d'altres opcions de desenvolupament mòbil on s'intercanvia la interfície mitjançant fitxers XML/HTML i l'estat en fitxers de codi separat, en Flutter <strong>absolutament tot és un Widget</strong>.</p>
+        
+        <div class="info-box">
+            <strong>🧱 L'Analogia del Joc de LEGO:</strong>
+            <p>Imagina que desenvolupar una aplicació mòbil és com construir un castell de LEGO. No pots crear peces de la nada; utilitzes blocs preexistents de diferents mides, colors i funcionalitats. Un bloc pot ser una peça bàsica (un <code>Text</code> o un <code>Icon</code>), o pot ser una placa base que aguanta altres peces (un <code>Row</code> o una <code>Column</code>).</p>
+            <p>Si vols canviar el color d'una estructura, no pintes el bloc directament: l'embolcalles o el substitueixes per un altre bloc que defineixi aquesta funcionalitat. Combinant i anidant aquests blocs en una jerarquia d'arbre, es construeixen des dels botons més senzills fins a les pantalles més complexes.</p>
+        </div>
+
+        <ul>
+            <li><strong>Widgets Visuals:</strong> <code>Text</code>, <code>Image</code>, <code>Icon</code>, <code>ElevatedButton</code>.</li>
+            <li><strong>Widgets de Disposició / Layout:</strong> <code>Row</code>, <code>Column</code>, <code>Stack</code>, <code>Padding</code>, <code>Center</code>.</li>
+            <li><strong>Widgets d'Estructura / Estil:</strong> <code>Scaffold</code>, <code>MaterialApp</code>, <code>Theme</code>, <code>MediaQuery</code>.</li>
+        </ul>
+    </section>
+
+    <!-- SECCIÓ 3: MATERIAL 3 -->
+    <section>
+        <h2>3. Sistema de Disseny: Material 3 (M3)</h2>
+        <p><strong>Material 3</strong> (també conegut com <em>Material You</em>) és l'última versió del sistema de disseny de Google. Flutter el va adoptar com a estàndard per defecte a partir de les seves darreres versions de producció.</p>
+
+        <h3>Per què s'utilitza?</h3>
+        <ul>
+            <li><strong>Personalització Dinàmica:</strong> Permet generar paletes de color completes harmonioses a partir d'un únic color base (<code>seedColor</code>).</li>
+            <li><strong>Components Adaptatius i Moderns:</strong> Ofereix botons amb cantonades més arredonides, targetes sense ombres exagerades i navegació flotant millorada.</li>
+            <li><strong>Accessibilitat integrada:</strong> Garanteix nivells de contrast de text, mides de cerca de fitxers i zones de contacte tàctil homologades per a usuaris amb necessitats especials.</li>
+        </ul>
+
+        <h3>Com s'activa en Flutter?</h3>
+        <p>Només cal instanciar el paràmetre <code>useMaterial3: true</code> (habilitat per defecte) dins del tema general de l'aplicació:</p>
+
+<pre><code>MaterialApp(
+  title: 'La meva App PMDM',
+  theme: ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.deepPurple,
+      brightness: Brightness.light,
+    ),
+  ),
+  home: const HomeScreen(),
+);</code></pre>
+    </section>
+
+    <!-- SECCIÓ 4: CLASSES D'ESTIL BÀSIQUES -->
+    <section>
+        <h2>4. Classes Fonamentals per a la Interfície</h2>
+        <p>Abans de construir widgets complexos, cal conèixer les classes auxiliars que defineixen la geometria, els espaiats i l'aparença visual:</p>
+
+        <ul>
+            <li>
+                <strong><code>Color</code> i <code>ColorScheme</code>:</strong> Permet definir valors cromàtics mitjançant paletes predefinides (<code>Colors.blue</code>), codis hexadecimals (<code>Color(0xFF42A5F5)</code>) o canals de transparència (<code>Color.fromRGBO(255, 0, 0, 0.5)</code>).
+            </li>
+            <li>
+                <strong><code>EdgeInsets</code> (Padding i Margin):</strong> Utilitzat per determinar l'espaiat intern o extern al voltant d'un widget.
+                <ul>
+                    <li><code>EdgeInsets.all(16.0)</code>: Aplica la mateixa distància als 4 costats.</li>
+                    <li><code>EdgeInsets.symmetric(horizontal: 20, vertical: 10)</code>: Espaiats per eixos.</li>
+                    <li><code>EdgeInsets.only(top: 12, bottom: 8)</code>: Defineix marges de manera individual.</li>
+                </ul>
+            </li>
+            <li>
+                <strong><code>BoxDecoration</code>:</strong> La classe responsable de pintar el fons d'un <code>Container</code>. Suporta colors plans, degradats (<code>LinearGradient</code>), vores (<code>Border.all()</code>), imatges de fons i ombres (<code>BoxShadow</code>).
+            </li>
+            <li>
+                <strong><code>BorderRadius</code>:</strong> Permet aplicar curvatura a les esquinçalls dels contenidors (ex. <code>BorderRadius.circular(16.0)</code>).
+            </li>
+        </ul>
+    </section>
+
+    <!-- SECCIÓ 5: CATÀLEG DE COMPONENTS BÀSICS (REESTRUCTURADA I COMPLETA) -->
+    <section>
+        <h2>5. Catàleg de Components Bàsics (Widgets)</h2>
+
+        <!-- 5.1 ESTRUCTURA BASE -->
+        <div class="widget-block">
+            <div class="widget-info">
+                <h3>5.1 Estructura Base: MaterialApp i Scaffold</h3>
+                <p><code>MaterialApp</code> és el punt d'entrada que configura el tema global, el sistema de rutes i l'estil Material. Per la seva banda, <code>Scaffold</code> proporciona l'esquelet visual de pantalla estàndard (barra superior, cos, botó flotant i menú de navegació).</p>
+<pre><code>MaterialApp(
+  home: Scaffold(
+    appBar: AppBar(title: Text('PMDM App')),
+    body: Center(child: Text('Contingut principal')),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {},
+      child: Icon(Icons.add),
+    ),
+  ),
+);</code></pre>
+            </div>
+            <div class="phone-mockup">
+                <div class="screen">
+                    <div class="app-bar-mock">
+                        <span>PMDM App</span>
+                        <span>⚙️</span>
+                    </div>
+                    <div class="screen-body" style="justify-content: center; align-items: center;">
+                        <span style="color: #666; font-size: 0.8rem;">Contingut del Scaffold</span>
+                        <div style="position: absolute; bottom: 15px; right: 15px; background: #EADDFF; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">➕</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5.2 TEXT I TEXTSTYLE -->
+        <div class="widget-block">
+            <div class="widget-info">
+                <h3>5.2 Text i TextStyle</h3>
+                <p>El widget <code>Text</code> mostra cadenes de text i es personalitza mitjançant la propietat <code>style</code> amb instàncies de <code>TextStyle</code>.</p>
+<pre><code>Text(
+  'Desenvolupament Mòbil',
+  textAlign: TextAlign.center,
+  style: TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.deepPurple,
+    letterSpacing: 1.1,
+  ),
+)</code></pre>
+            </div>
+            <div class="phone-mockup">
+                <div class="screen">
+                    <div class="app-bar-mock"><span>Text Demo</span></div>
+                    <div class="screen-body" style="justify-content: center; align-items: center;">
+                        <span style="font-size: 0.9rem; font-weight: bold; color: #6750A4; letter-spacing: 1px; text-align: center;">Desenvolupament Mòbil</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5.3 DISSENY I DISPOSICIÓ: COLUMN, ROW I CONTAINER -->
+        <div class="widget-block">
+            <div class="widget-info">
+                <h3>5.3 Disseny i Disposició: Column, Row i Container</h3>
+                <p>Són els blocs fonamentals per organitzar la interfície espacialment:</p>
+                <ul>
+                    <li><code>Column</code>: Disposa els fills en línia <strong>vertical</strong>.</li>
+                    <li><code>Row</code>: Disposa els fills en línia <strong>horitzontal</strong>.</li>
+                    <li><code>Container</code>: Caixa amb mides, padding, fons decorats, ombres i vores.</li>
+                </ul>
+<pre><code>// Column amb Row i Container
+Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Container(
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.purple.shade50,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Icon(Icons.star, color: Colors.amber),
+          Text('Element en Fila'),
+          Icon(Icons.favorite, color: Colors.red),
+        ],
+      ),
+    ),
+  ],
+)</code></pre>
+            </div>
+            <div class="phone-mockup">
+                <div class="screen">
+                    <div class="app-bar-mock"><span>Layout Demo</span></div>
+                    <div class="screen-body" style="justify-content: center; gap: 8px;">
+                        <span style="font-size: 0.7rem; color: #888;">--- Column Start ---</span>
+                        <div style="background: #F3EDF7; padding: 10px; border-radius: 8px; border: 1px dashed #6750A4;">
+                            <div style="display: flex; justify-content: space-around; align-items: center; font-size: 0.75rem;">
+                                <span>⭐</span>
+                                <span style="font-weight: bold;">Row + Container</span>
+                                <span>❤️</span>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.7rem; color: #888;">--- Column End ---</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5.4 BOTONS -->
+        <div class="widget-block">
+            <div class="widget-info">
+                <h3>5.4 Botons (Normals i de Material 3)</h3>
+                <p>Material 3 introdueix variants de botons amb diferents nivells d'èmfasi visual:</p>
+                <ul>
+                    <li><code>ElevatedButton</code>: Accions principals amb ombra subtil.</li>
+                    <li><code>FilledButton</code>: Botó d'alt èmfasi amb fons d'obertura.</li>
+                    <li><code>FilledButton.tonal</code>: Opció secundària d'èmfasi mitjà.</li>
+                    <li><code>OutlinedButton</code>: Botons amb línia de vora per a accions secundàries.</li>
+                </ul>
+<pre><code>Column(
+  children: [
+    ElevatedButton(onPressed: () {}, child: Text('Elevated')),
+    FilledButton(onPressed: () {}, child: Text('Filled M3')),
+    FilledButton.tonal(onPressed: () {}, child: Text('Tonal M3')),
+    OutlinedButton(onPressed: () {}, child: Text('Outlined')),
+  ],
+)</code></pre>
+            </div>
+            <div class="phone-mockup">
+                <div class="screen">
+                    <div class="app-bar-mock"><span>Buttons Demo</span></div>
+                    <div class="screen-body" style="justify-content: center; align-items: center; gap: 8px;">
+                        <span class="mock-btn mock-btn-elevated">ElevatedButton</span>
+                        <span class="mock-btn mock-btn-filled">FilledButton</span>
+                        <span class="mock-btn mock-btn-tonal">FilledButton.tonal</span>
+                        <span class="mock-btn mock-btn-outlined">OutlinedButton</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5.5 IMAGE -->
+        <div class="widget-block">
+            <div class="widget-info">
+                <h3>5.5 Image (Descàrrega i Gestió d'Imatges)</h3>
+                <p>Incorporen recursos gràfics locals o remots. Es combinen sovint amb <code>ClipRRect</code> per arrodonir cantonades.</p>
+                <ul>
+                    <li><code>Image.network(...)</code>: Carrega des d'una URL web.</li>
+                    <li><code>Image.asset(...)</code>: Carrega fitxers interns declarats al <code>pubspec.yaml</code>.</li>
+                </ul>
+<pre><code>ClipRRect(
+  borderRadius: BorderRadius.circular(12),
+  child: Image.network(
+    'https://picsum.photos/300/150',
+    height: 120,
+    width: double.infinity,
+    fit: BoxFit.cover,
+  ),
+)</code></pre>
+            </div>
+            <div class="phone-mockup">
+                <div class="screen">
+                    <div class="app-bar-mock"><span>Image Demo</span></div>
+                    <div class="screen-body" style="justify-content: center; align-items: center;">
+                        <div style="width: 100%; height: 110px; background: linear-gradient(135deg, #02569B, #01B5D8); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; text-align: center; padding: 10px;">
+                            🖼️ Image.network<br>(BoxFit.cover)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5.6 LISTVIEW I LISTTILE -->
+        <div class="widget-block">
+            <div class="widget-info">
+                <h3>5.6 Visualització de Dades: ListView i ListTile</h3>
+                <p><code>ListView</code> permet la navegació per desplaçament (scroll) de llistes llargues de contingut. Utilitzat juntament amb <code>ListTile</code>, ofereix l'estructura de llista estàndard de Material (icona d'inici, títol, subtítol i icona final).</p>
+<pre><code>ListView.builder(
+  itemCount: 5,
+  itemBuilder: (context, index) {
+    return ListTile(
+      leading: CircleAvatar(child: Text('${index + 1}')),
+      title: Text('Usuari ${index + 1}'),
+      subtitle: Text('Correu de l\'alumne...'),
+      trailing: Icon(Icons.arrow_forward_ios, size: 16),
+      onTap: () {},
+    );
+  },
+)</code></pre>
+            </div>
+            <div class="phone-mockup">
+                <div class="screen">
+                    <div class="app-bar-mock"><span>ListView Demo</span></div>
+                    <div class="screen-body" style="padding: 6px; gap: 6px;">
+                        <div class="list-item-mock">
+                            <div class="avatar-mock">1</div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-size: 0.75rem; font-weight: bold;">Usuari 1</div>
+                                <div style="font-size: 0.65rem; color: #666;">alumne1@ies.cat</div>
+                            </div>
+                            <span style="font-size: 0.7rem; color: #aaa;">❯</span>
+                        </div>
+                        <div class="list-item-mock">
+                            <div class="avatar-mock">2</div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-size: 0.75rem; font-weight: bold;">Usuari 2</div>
+                                <div style="font-size: 0.65rem; color: #666;">alumne2@ies.cat</div>
+                            </div>
+                            <span style="font-size: 0.7rem; color: #aaa;">❯</span>
+                        </div>
+                        <div class="list-item-mock">
+                            <div class="avatar-mock">3</div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-size: 0.75rem; font-weight: bold;">Usuari 3</div>
+                                <div style="font-size: 0.65rem; color: #666;">alumne3@ies.cat</div>
+                            </div>
+                            <span style="font-size: 0.7rem; color: #aaa;">❯</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 6: BONES PRÀCTIQUES RESPONSIVE -->
+    <section>
+        <h2>6. Bones Pràctiques per a Disseny Responsive</h2>
+        <p>Crear interfícies que s'adaptin correctament a diferents mides de pantalla (mòbils petits, tauletes, escriptori) requereix evitar mides fixes rígides en píxels.</p>
+
+        <div class="info-box">
+            <strong>Regles d'Or per al Disseny Adaptatiu en Flutter:</strong>
+            <ol>
+                <li>
+                    <strong>Evita mides fixes elevades:</strong> No utilitzis amplades fixes com <code>width: 400</code> en contenidors centrals. Fes servir layouts flexibles.
+                </li>
+                <li>
+                    <strong>Utilitza <code>Expanded</code> i <code>Flexible</code> dins de Row/Column:</strong> Evita els errors visuals de franges negres i grogues <em>"overflowed by X pixels"</em> atorgant flexibilitat al contingut sobrant.
+                </li>
+                <li>
+                    <strong>Emprera <code>LayoutBuilder</code>:</strong> Permet obtenir les restriccions d'espai (amplada/alçària màxima) que el pare atorga al fill per decidir si cal pintar una disposició horitzontal o vertical.
+                </li>
+                <li>
+                    <strong>Llegeix el context amb <code>MediaQuery</code>:</strong> Proporciona accés directe a les dimensions reals de la pantalla del dispositiu (<code>MediaQuery.of(context).size.width</code>) i a l'orientació (horitzontal/vertical).
+                </li>
+                <li>
+                    <strong>Utilitza <code>Wrap</code> en lloc de <code>Row</code> per a col·leccions dinàmiques:</strong> Si una fila té massa elements, <code>Wrap</code> fa saltar els elements sobrants automàticament a la línia següent.
+                </li>
+            </ol>
+        </div>
+
+<pre><code>// Exemple d'interfície bàsica responsive amb LayoutBuilder
+LayoutBuilder(
+  builder: (context, constraints) {
+    if (constraints.maxWidth > 600) {
+      // Disseny per a Tauleta / Pantalla Gran (Horitzontal)
+      return Row(children: [SidebarWidget(), MainContent()]);
+    } else {
+      // Disseny per a Mòbil (Vertical)
+      return Column(children: [MainContent()]);
+    }
+  },
+);</code></pre>
+    </section>
+
+    <!-- SECCIÓ 7: FUNCIONAMENT INTERN - ELS TRES ARBRES (Deep Dive) -->
+    <section>
+        <h2>7. Arquitectura Interna: Deep Dive en els 3 Arbres</h2>
+        <p>Una de les preguntes clau en l'enginyeria de Flutter és: <em>Com aconsegueix el framework executar-se a 60/120 FPS de manera fluida si re-crea la interfície contínuament?</em> La clau rau en la seva arquitectura de <strong>tres arbres paral·lels</strong>.</p>
+
+        <p>Quan executem l'aplicació, el framework manté 3 estructures de dades interconnectades amb rols ben definits:</p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Arbre (Tree)</th>
+                    <th>Rol d'Enginyeria</th>
+                    <th>Descripció i Funcionament Intern</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>1. Widget Tree</strong></td>
+                    <td><strong>El Plànol</strong><br>*(Blueprint)*</td>
+                    <td>
+                        És una configuració <strong>immutable i ultra-lleugera</strong> de la interfície. Descriu com ha de ser la UI en un moment donat. Cada vegada que hi ha un canvi, es destructura i es re-crea de zero sense impactar el rendiment de la memòria.
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>2. Element Tree</strong></td>
+                    <td><strong>El Gestor</strong><br>*(Manager & Context)*</td>
+                    <td>
+                        És la representació <strong>mutable i persistent</strong> de l'estructura. Connecta el Widget amb el RenderObject. Guarda l'estat (<code>State</code>) i gestiona el <code>BuildContext</code>. L'Element Tree sobreviu a les re-construccions contínues del Widget Tree.
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>3. RenderObject Tree</strong></td>
+                    <td><strong>El Treballador</strong><br>*(Worker & Renderer)*</td>
+                    <td>
+                        És l'encarregat del càlcul costós de geometria (Layout), restriccions de mida, zones de contacte tàctil (Hit Testing) i del dibuix dels píxels en pantalla (Painting via Impeller/Skia). Només s'actualitza o re-pinta si l'Element detecta canvis reals.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="warning-box">
+            <strong>⚡ Cicle de Reconciliació (*Tree Diffing*) durant el <code>setState()</code>:</strong>
+            <p>Quan s'executa un mètode <code>setState()</code> en un <code>StatefulWidget</code>:</p>
+            <ol>
+                <li>L'<strong>Element Tree</strong> marca el seu node intern com a "brut" (<em>dirty</em>).</li>
+                <li>En el següent fotograma, el framework executa el mètode <code>build()</code> i genera un nou <strong>Widget Tree</strong>.</li>
+                <li>L'Element Tree executa el mètode <code>Widget.canUpdate()</code> comparant el nou widget amb l'antic (comprovant la classe i la <code>Key</code>).</li>
+                <li>Si coincideixen, l'Element <strong>NO es re-crea</strong>; simplement actualitza les noves propietats sobre el <strong>RenderObject</strong> existent, evitant re-pintar tota la pantalla des de zero.</li>
+            </ol>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    // JS per fer interactiva la demo de StatefulWidget
+    let count = 0;
+    function incrementCounter() {
+        count++;
+        const valElem = document.getElementById('counterVal');
+        const boxElem = document.getElementById('statefulDemoBox');
+        
+        valElem.innerText = count;
+        
+        boxElem.classList.remove('rebuild-animation');
+        void boxElem.offsetWidth; // Trigger reflow
+        boxElem.classList.add('rebuild-animation');
+    }
+</script>
+
+</body>
+</html>
