@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Laboratori: Pràctica 2 - Catàleg de Components Flutter</title>
+    <style>
+        :root {
+            --primary: #6750A4;
+            --on-primary: #FFFFFF;
+            --primary-container: #EADDFF;
+            --on-primary-container: #21005D;
+            --secondary: #625B71;
+            --surface: #FEF7FF;
+            --on-surface: #1D1B20;
+            --surface-variant: #E7E0EC;
+            --outline: #79747E;
+            --code-bg: #1E1E2E;
+            --code-color: #CDD6F4;
+            --accent-cyan: #01B5D8;
+            --warning-bg: #FFF4E5;
+            --warning-border: #FF9800;
+            --danger-bg: #FFEDEA;
+            --danger-border: #B3261E;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #F4F0F8;
+            color: var(--on-surface);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-container);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.1rem;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--on-primary-container);
+            background-color: var(--primary-container);
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 1.35rem;
+            margin-top: 40px;
+        }
+
+        h3 {
+            color: var(--primary);
+            font-size: 1.15rem;
+            margin-top: 25px;
+            border-bottom: 2px solid var(--surface-variant);
+            padding-bottom: 6px;
+        }
+
+        p, li {
+            font-size: 0.98rem;
+            color: #2D2D2D;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+        }
+
+        .step-box {
+            background-color: #FAF8FC;
+            border: 1px solid var(--surface-variant);
+            border-left: 5px solid var(--primary);
+            padding: 18px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box {
+            background-color: #F0F4FF;
+            border-left: 5px solid var(--accent-cyan);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background-color: var(--warning-bg);
+            border-left: 5px solid var(--warning-border);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .danger-box {
+            background-color: var(--danger-bg);
+            border-left: 5px solid var(--danger-border);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-color);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            margin-top: 8px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+            background-color: #EAE6F0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--on-primary-container);
+            font-size: 0.9em;
+        }
+
+        /* Desplegables de solució */
+        details {
+            background-color: #F3EDF7;
+            border: 1px solid var(--surface-variant);
+            border-radius: 8px;
+            margin: 15px 0;
+            padding: 10px 14px;
+        }
+
+        summary {
+            font-weight: bold;
+            color: var(--primary);
+            cursor: pointer;
+            outline: none;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        summary:hover {
+            color: var(--on-primary-container);
+        }
+
+        details[open] {
+            background-color: #FFFFFF;
+            border-color: var(--primary);
+        }
+
+        details[open] summary {
+            border-bottom: 1px dashed var(--surface-variant);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid var(--surface-variant);
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: var(--primary-container);
+            color: var(--on-primary-container);
+            font-weight: bold;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #FDFBFF;
+        }
+
+        /* Layout Grid per a Instruccions i Mockup */
+        .tutorial-grid {
+            display: grid;
+            grid-template-columns: 1fr 270px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (max-width: 850px) {
+            .tutorial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mockup Phone Viewers */
+        .phone-mockup {
+            width: 260px;
+            height: 410px;
+            background-color: #121212;
+            border-radius: 28px;
+            padding: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin: 10px auto;
+            box-sizing: border-box;
+        }
+
+        .screen {
+            background-color: #FFFFFF;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            font-family: sans-serif;
+        }
+
+        .app-bar-mock {
+            background-color: var(--primary);
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .screen-body {
+            padding: 10px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background-color: #FAF8FC;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="badge">PMDM • CFGS DAM / DAW</span>
+        <h1>Pràctica 2: Desenvolupament de l'Aplicació Catàleg de Components</h1>
+        <p class="subtitle">Guia de Laboratori Pas a Pas • Tutorial Completa Autònoma</p>
+    </header>
+
+    <!-- INTRODUCCIÓ I METODOLOGIA -->
+    <section>
+        <div class="info-box">
+            <strong>📋 Com utilitzar aquesta guia de laboratori:</strong>
+            <p>Aquesta guia conté el pas a pas detallat per construir l'aplicació <code>exercici2_mix</code> de forma 100% autònoma. Al final de cada apartat trobaràs el desplegable <strong>"🔍 Codi de verificació"</strong> que conté el codi font complet i funcional de la secció corresponent per comprovar, corregir o entendre el teu treball.</p>
+        </div>
+    </section>
+
+    <!-- BLOC 1: PREPARACIÓ, ASSETS I ESTRUCTURA BASE -->
+    <section>
+        <h2>Bloc 1: Configuració Inicial, Gestió d'Assets i Menú JSON</h2>
+
+        <div class="step-box">
+            <div class="step-title">📍 Pas 1.1: Creació del Projecte i Arbre de Carpetes</div>
+            <p>1. Obre el terminal de VS Code i crea el nou projecte executant <code>flutter create exercici2_mix</code> (o mitjançant la paleta de comandes <code>Ctrl + Shift + P</code> &gt; <em>Flutter: New Project</em>).</p>
+            <p>2. Dins de la carpeta <code>lib/</code>, crea la següent estructura de carpetes i fitxers:</p>
+<pre><code>lib/
+├── main.dart
+└── src/
+    ├── providers/
+    │   └── menu_provider.dart
+    ├── routes/
+    │   └── routes.dart
+    ├── screens/
+    │   ├── alert_screen.dart
+    │   ├── animated_container_screen.dart
+    │   ├── avatar_screen.dart
+    │   ├── card_screen.dart
+    │   ├── home_screen.dart
+    │   ├── inputs_screen.dart
+    │   ├── listview_screen.dart
+    │   └── slider_screen.dart
+    └── utils/
+        └── icona_string_util.dart</code></pre>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">📍 Pas 1.2: Creació de les carpetes d'Assets (`data/` i `assets/`)</div>
+            <p>A l'arrel del teu projecte (al mateix nivell que la carpeta <code>lib/</code>), crea dues carpetes:</p>
+
+            <ol>
+                <li>Crea la carpeta <code>data/</code> i, a dins, crea el fitxer <code>menu_opts.json</code> amb aquest contingut:</li>
+<pre><code>{
+  "nomApp": "Components",
+  "rutes": [
+    { "ruta": "alert", "icona": "add_alert", "texte": "Alertes" },
+    { "ruta": "avatar", "icona": "accessibility", "texte": "Avatars" },
+    { "ruta": "card", "icona": "folder_open", "texte": "Cards - Targetes" },
+    { "ruta": "animatedContainer", "icona": "donut_large", "texte": "Animated Container" },
+    { "ruta": "inputs", "icona": "input", "texte": "Inputs" },
+    { "ruta": "slider", "icona": "tune", "texte": "Slider - Checks" },
+    { "ruta": "list", "icona": "list", "texte": "Llistes y Scroll" }
+  ]
+}</code></pre>
+
+                <li>Crea la carpeta <code>assets/</code> a l'arrel del projecte i descarrega o copia a dins la imatge animada <code>jar-loading.gif</code> proporcionada a l'aula virtual. Aquest GIF s'utilitzarà com a indicador de càrrega provisional (<em>placeholder</em>) mentre es descarreguen les imatges des d'Internet.</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">📍 Pas 1.3: Configuració de Recursos al `pubspec.yaml`</div>
+            <p>Obre el fitxer <code>pubspec.yaml</code> a l'arrel del projecte per activar la lectura dels recursos estàtics (assets).</p>
+
+            <div class="danger-box">
+                <strong>🚨 ATENCIÓ CRÍTICA A LES TABULACIONS I ESPAIS AL `pubspec.yaml`:</strong>
+                El fitxer <code>pubspec.yaml</code> utilitza la sintaxi <strong>YAML</strong>, la qual depèn estrictament de la indentació d'espais (no utilitzis mai la tecla <em>Tabulador</em>, utilitza espais simples). Un sol espai de més o de menys provocarà un error de sintaxi i l'aplicació no funcionarà.
+            </div>
+
+            <p>Descomenta la secció <code>assets:</code> i afegeix exactament les rutes següents respectant dos espais d'indentació respecte a <code>flutter:</code>:</p>
+
+<pre><code>flutter:
+  uses-material-design: true
+
+  assets:
+    - data/menu_opts.json
+    - assets/</code></pre>
+
+            <div class="warning-box">
+                <strong>⚠️ Després de desar el `pubspec.yaml`:</strong>
+                Comprova que s'executa automàticament la comanda <code>flutter pub get</code> a la consola. Perquè Flutter carregui els nous recursos a la màquina virtual, cal aturar l'execució en curs (botó vermell de quadrat) i tornar a iniciar-la amb <strong>F5</strong> o fer un <strong>Full Restart</strong>.
+            </div>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">📍 Pas 1.4: Codi del Proveïdor de Dades (`menu_provider.dart`)</div>
+            <p>A <code>lib/src/providers/menu_provider.dart</code>, utilitzarem el paquet <code>flutter/services.dart</code> per accedir a <code>rootBundle</code> i llegir el fitxer JSON, i <code>dart:convert</code> per convertir el text en un <code>Map</code> dinàmic:</p>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/providers/menu_provider.dart</code></summary>
+<pre><code>import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
+
+class _MenuProvider {
+  List&lt;dynamic&gt; opcions = [];
+
+  _MenuProvider() {
+    // carregarDades();
+  }
+
+  Future&lt;List&lt;dynamic&gt;&gt; carregarDades() async {
+    final resposta = await rootBundle.loadString('data/menu_opts.json');
+    Map dataMap = json.decode(resposta);
+    opcions = dataMap['rutes'];
+    return opcions;
+  }
+}
+
+final menuProvider = _MenuProvider();</code></pre>
+            </details>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">📍 Pas 1.5: Utilitari de Traducció d'Icones (`icona_string_util.dart`)</div>
+            <p>Les icones definides al JSON són text (<code>"add_alert"</code>, <code>"folder_open"</code>...). A <code>lib/src/utils/icona_string_util.dart</code> crearem un mapa per convertir aquests text en objectes <code>IconData</code> de Flutter:</p>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/utils/icona_string_util.dart</code></summary>
+<pre><code>import 'package:flutter/material.dart';
+
+final _icons = &lt;String, IconData&gt;{
+  'add_alert': Icons.add_alert,
+  'accessibility': Icons.accessibility,
+  'folder_open': Icons.folder_open,
+  'donut_large': Icons.donut_large,
+  'input': Icons.input,
+  'tune': Icons.tune,
+  'list': Icons.list,
+};
+
+Icon getIcon(String nomIcona) {
+  return Icon(_icons[nomIcona] ?? Icons.folder_off, color: Colors.blue);
+}</code></pre>
+            </details>
+        </div>
+
+        <div class="step-box">
+            <div class="step-title">📍 Pas 1.6: La Pantalla Principal (`home_screen.dart`)</div>
+            <p>A <code>lib/src/screens/home_screen.dart</code> crearem la pantalla principal. Com que la lectura del JSON és un procés asíncron, utilitzarem el widget <code>FutureBuilder&lt;List&lt;dynamic&gt;&gt;</code> vinculat a <code>menuProvider.carregarDades()</code>.</p>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/screens/home_screen.dart</code></summary>
+<pre><code>import 'package:flutter/material.dart';
+import '../providers/menu_provider.dart';
+import '../utils/icona_string_util.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Components'),
+      ),
+      body: _llista(),
+    );
+  }
+
+  Widget _llista() {
+    return FutureBuilder&lt;List&lt;dynamic&gt;&gt;(
+      future: menuProvider.carregarDades(),
+      initialData: const [],
+      builder: (context, AsyncSnapshot&lt;List&lt;dynamic&gt;&gt; snapshot) {
+        return ListView(
+          children: _llistaElements(context, snapshot.data ?? []),
+        );
+      },
+    );
+  }
+
+  List&lt;Widget&gt; _llistaElements(BuildContext context, List&lt;dynamic&gt; data) {
+    final List&lt;Widget&gt; elements = [];
+    for (var element in data) {
+      final widgetTemp = ListTile(
+        title: Text(element['texte']),
+        leading: getIcon(element['icona']),
+        trailing: const Icon(Icons.keyboard_arrow_right, color: Colors.blue),
+        onTap: () {
+          Navigator.pushNamed(context, element['ruta']);
+        },
+      );
+      elements..add(widgetTemp)..add(const Divider());
+    }
+    return elements;
+  }
+}</code></pre>
+            </details>
+        </div>
+    </section>
+
+    <!-- BLOC 2: DESENVOLUPAMENT DE LES 7 PANTALLES INDEPENDENTS -->
+    <section>
+        <h2>Bloc 2: Desenvolupament de les 7 Pantalles del Catàleg</h2>
+
+        <!-- 1. ALERTES -->
+        <div class="step-box">
+            <div class="step-title">📍 1. Alertes (alert_screen.dart)</div>
+            <div class="tutorial-grid">
+                <div>
+                    <p>A <code>lib/src/screens/alert_screen.dart</code> programarem la visualització de diàlegs modals d'alerta:</p>
+                    <ul>
+                        <li>Dissenya un <code>ElevatedButton</code> central amb estil arrodunit <code>StadiumBorder()</code>.</li>
+                        <li>Implementa la funció privada <code>_mostrarAlert(BuildContext context)</code> executant <code>showDialog()</code> amb <code>barrierDismissible: true</code> (permetre sortir fent clic a fora del diàleg).</li>
+                        <li>A l'<code>AlertDialog</code>, estableix la forma amb <code>RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))</code>.</li>
+                        <li>Configura la <code>Column</code> interna del diàleg amb <code>mainAxisSize: MainAxisSize.min</code> per evitar que s'expandeixi verticalment per tota la pantalla.</li>
+                        <li>Afegeix dos botons d'acció (<code>TextButton</code>) "Cancel·lar" i "Ok" que tanquin el diàleg executant <code>Navigator.of(context).pop()</code>.</li>
+                        <li><strong>Botó de tornar enrere:</strong> Afegeix un <code>FloatingActionButton</code> a l'Scaffold amb la icona <code>Icons.arrow_back</code> que execute <code>Navigator.pop(context)</code> per tornar a la pantalla principal.</li>
+                    </ul>
+                </div>
+                <div class="phone-mockup">
+                    <div class="screen">
+                        <div class="app-bar-mock"><span>Pàgina Alert</span></div>
+                        <div class="screen-body" style="justify-content: center; align-items: center; position: relative;">
+                            <div style="background: white; border-radius: 16px; padding: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: center;">
+                                <div style="font-size: 0.75rem; font-weight: bold;">Títol de l'alerta</div>
+                                <div style="font-size: 0.65rem; color: #666; margin: 6px 0;">Aquest és el contingut de l'alerta personalitzable.</div>
+                                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
+                                    <span style="font-size: 0.65rem; color: #02569B; font-weight: bold;">Cancel·lar</span>
+                                    <span style="font-size: 0.65rem; color: #02569B; font-weight: bold;">Ok</span>
+                                </div>
+                            </div>
+                            <div style="position: absolute; bottom: 10px; right: 10px; width: 28px; height: 28px; background: #02569B; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">←</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/screens/alert_screen.dart</code></summary>
+<pre><code>import 'package:flutter/material.dart';
+
+class AlertScreen extends StatelessWidget {
+  const AlertScreen({super.key});
+
+  void _mostrarAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          title: const Text('Títol de l\'alerta'),
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Aquest és el contingut de l\'alerta personalitzable.'),
+              FlutterLogo(size: 50.0),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () =&gt; Navigator.of(context).pop(),
+              child: const Text('Cancel·lar'),
+            ),
+            TextButton(
+              onPressed: () =&gt; Navigator.of(context).pop(),
+              child: const Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pàgina Alert'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            shape: const StadiumBorder(),
+          ),
+          onPressed: () =&gt; _mostrarAlert(context),
+          child: const Text('Botó alerta!'),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.arrow_back),
+        onPressed: () =&gt; Navigator.pop(context),
+      ),
+    );
+  }
+}</code></pre>
+            </details>
+        </div>
+
+        <!-- 2. AVATARS -->
+        <div class="step-box">
+            <div class="step-title">📍 2. Avatars (avatar_screen.dart)</div>
+            <div class="tutorial-grid">
+                <div>
+                    <p>A <code>lib/src/screens/avatar_screen.dart</code> configurarem la visualització d'avatars de diferents tipus:</p>
+                    <ul>
+                        <li>Dins del paràmetre <code>actions</code> de l'<code>AppBar</code>, afegeix un primer <code>CircleAvatar</code> amb una imatge des de la xarxa (<code>backgroundImage: NetworkImage(...)</code>) envoltat d'un <code>Container</code> amb padding.</li>
+                        <li>Afegeix un segon <code>CircleAvatar</code> a l'AppBar que mostre text amb les inicials (Ex. "JC") i fons fosc (<code>Colors.brown</code>).</li>
+                        <li>Al <code>body</code> de la pantalla, afegeix una imatge principal centrada amb <code>FadeInImage</code>. Com a imatge d'espera (<code>placeholder</code>), utilitza la imatge local <code>AssetImage('assets/jar-loading.gif')</code> configurada al Bloc 1.</li>
+                    </ul>
+                </div>
+                <div class="phone-mockup">
+                    <div class="screen">
+                        <div class="app-bar-mock">
+                            <span>Pàgina Avatar</span>
+                            <div style="display: flex; gap: 4px; align-items: center;">
+                                <div style="width: 22px; height: 22px; border-radius: 50%; background: #ddd; background-image: url('https://static.wikia.nocookie.net/minion/images/c/ca/Bob-from-the-minions-movie.jpg'); background-size: cover;"></div>
+                                <div style="width: 22px; height: 22px; border-radius: 50%; background: #795548; color: white; font-size: 0.55rem; display: flex; align-items: center; justify-content: center; font-weight: bold;">JC</div>
+                            </div>
+                        </div>
+                        <div class="screen-body" style="justify-content: center; align-items: center;">
+                            <div style="width: 130px; height: 130px; border-radius: 8px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🖼️ GIF / Img</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/screens/avatar_screen.dart</code></summary>
+<pre><code>import 'package:flutter/material.dart';
+
+class AvatarScreen extends StatelessWidget {
+  const AvatarScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pàgina Avatar'),
+        actions: [
+          Container(
+            padding: const EdgeInsets.all(5.0),
+            child: const CircleAvatar(
+              backgroundImage: NetworkImage('https://static.wikia.nocookie.net/minion/images/c/ca/Bob-from-the-minions-movie.jpg/revision/latest/scale-to-width-down/600?cb=20160316002021&path-prefix=es'),
+              radius: 25.0,
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(right: 10.0),
+            child: const CircleAvatar(
+              backgroundColor: Colors.brown,
+              child: Text('JC'),
+            ),
+          )
+        ],
+      ),
+      body: const Center(
+        child: FadeInImage(
+          placeholder: AssetImage('assets/jar-loading.gif'),
+          image: NetworkImage('https://static.wikia.nocookie.net/minion/images/c/ca/Bob-from-the-minions-movie.jpg/revision/latest/scale-to-width-down/600?cb=20160316002021&path-prefix=es'),
+          fadeInDuration: Duration(milliseconds: 100),
+        ),
+      ),
+    );
+  }
+}</code></pre>
+            </details>
+        </div>
+
+        <!-- 3. CARDS -->
+        <div class="step-box">
+            <div class="step-title">📍 3. Targetes (card_screen.dart)</div>
+            <div class="tutorial-grid">
+                <div>
+                    <p>A <code>lib/src/screens/card_screen.dart</code> dissenyarem dos tipus de targetes visualment diferents:</p>
+                    <ul>
+                        <li><strong>Card Tipus 1:</strong> Widget <code>Card</code> estàndard amb <code>elevation: 10.0</code>, cantons arrodonits <code>RoundedRectangleBorder</code>, <code>ListTile</code> intern i una fila de botons (<code>TextButton</code>) alineats a la dreta.</li>
+                        <li><strong>Card Tipus 2 (Custom Container):</strong> Targeta avançada personalitzada. Es construeix amb un <code>Container</code> decorat amb <code>BoxDecoration</code> (ombra <code>boxShadow</code>, fons blanc i radi de 30px). Dins s'utilitza <code>ClipRRect</code> per tallar els caires de la imatge carregada amb <code>FadeInImage</code> utilitzant l'asset <code>assets/jar-loading.gif</code> com a indicador de càrrega provisional.</li>
+                    </ul>
+                </div>
+                <div class="phone-mockup">
+                    <div class="screen">
+                        <div class="app-bar-mock"><span>Cards</span></div>
+                        <div class="screen-body">
+                            <div style="background: white; border-radius: 8px; padding: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.7rem; font-weight: bold;">Títol de la targeta</div>
+                                <div style="font-size: 0.6rem; color: #666;">Lorem Ipsum is simply dummy text...</div>
+                                <div style="display: flex; justify-content: flex-end; gap: 4px; margin-top: 4px;">
+                                    <span style="font-size: 0.55rem; color: #02569B;">OK</span>
+                                    <span style="font-size: 0.55rem; color: #02569B;">Cancel·lar</span>
+                                </div>
+                            </div>
+                            <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.15);">
+                                <div style="height: 65px; background: #02569B; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.65rem;">🖼️ FadeInImage</div>
+                                <div style="padding: 4px; font-size: 0.6rem; text-align: center;">Títol de la imatge</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/screens/card_screen.dart</code></summary>
+<pre><code>import 'package:flutter/material.dart';
+
+class CardScreen extends StatelessWidget {
+  const CardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cards'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(10.0),
+        children: [
+          _cardTipus1(),
+          const SizedBox(height: 30.0),
+          _cardTipus2(),
+        ],
+      ),
+    );
+  }
+
+  Widget _cardTipus1() {
+    return Card(
+      elevation: 10.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Column(
+        children: [
+          const ListTile(
+            leading: Icon(Icons.photo_album, color: Colors.blue),
+            title: Text('Títol de la targeta'),
+            subtitle: Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.'),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(onPressed: () {}, child: const Text('OK')),
+              TextButton(onPressed: () {}, child: const Text('Cancel·lar')),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _cardTipus2() {
+    final targeta = Container(
+      child: Column(
+        children: [
+          const FadeInImage(
+            placeholder: AssetImage('assets/jar-loading.gif'),
+            image: NetworkImage('https://picsum.photos/id/1015/600/300'),
+            fadeInDuration: Duration(milliseconds: 100),
+            height: 250,
+            fit: BoxFit.cover,
+          ),
+          Container(
+            padding: const EdgeInsets.all(10),
+            child: const Text('Títol de la imatge'),
+          )
+        ],
+      ),
+    );
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.white,
+        boxShadow: const &lt;BoxShadow&gt;[
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 10.0,
+            spreadRadius: 2.0,
+            offset: Offset(2.0, 10.0),
+          )
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(30.0),
+        child: targeta,
+      ),
+    );
+  }
+}</code></pre>
+            </details>
+        </div>
+
+        <!-- 4. ANIMATED CONTAINER -->
+        <div class="step-box">
+            <div class="step-title">📍 4. Contenidor Animat (animated_container_screen.dart)</div>
+            <div class="tutorial-grid">
+                <div>
+                    <p>A <code>lib/src/screens/animated_container_screen.dart</code> crearem transicions de propietats automàtiques:</p>
+                    <ul>
+                        <li>Crea la classe com un <strong>StatefulWidget</strong>.</li>
+                        <li>Declara les variables privades d'estat: <code>_width = 50.0</code>, <code>_height = 50.0</code>, <code>_color = Colors.pink</code> i <code>_borderRadius = BorderRadius.circular(8.0)</code>.</li>
+                        <li>En lloc d'un <code>Container</code> normal, utilitza el widget <code>AnimatedContainer</code> afegint <code>duration: Duration(milliseconds: 1000)</code> i la corba d'animació <code>curve: Curves.fastOutSlowIn</code>.</li>
+                        <li>Al mètode <code>_randomContainer()</code>, utilitza la classe <code>Random()</code> d'<code>import 'dart:math'</code> per generar valors aleatoris per a l'amplada, l'alçada, el color (mitjançant <code>Color.fromRGBO(...)</code>) i el radi dels caires dins d'un <code>setState()</code>.</li>
+                        <li><strong>Botó d'acció de reproducció:</strong> Afegeix un <code>FloatingActionButton</code> a la part inferior de la pantalla amb la icona <code>Icons.play_arrow</code> que cridi la funció <code>_randomContainer</code> en fer-hi clic.</li>
+                    </ul>
+                </div>
+                <div class="phone-mockup">
+                    <div class="screen">
+                        <div class="app-bar-mock"><span>Contenidor Animat</span></div>
+                        <div class="screen-body" style="justify-content: center; align-items: center; position: relative;">
+                            <div style="width: 75px; height: 75px; background: #4CAF50; border-radius: 18px; transition: all 1s;"></div>
+                            <div style="position: absolute; bottom: 10px; right: 10px; width: 28px; height: 28px; background: #02569B; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">▶</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/screens/animated_container_screen.dart</code></summary>
+<pre><code>import 'dart:math';
+import 'package:flutter/material.dart';
+
+class AnimatedContainerScreen extends StatefulWidget {
+  const AnimatedContainerScreen({super.key});
+
+  @override
+  State&lt;AnimatedContainerScreen&gt; createState() =&gt; _AnimatedContainerScreenState();
+}
+
+class _AnimatedContainerScreenState extends State&lt;AnimatedContainerScreen&gt; {
+  double _width = 50.0;
+  double _height = 50.0;
+  Color _color = Colors.pink;
+  BorderRadiusGeometry _borderRadius = BorderRadius.circular(8.0);
+
+  void _randomContainer() {
+    final random = Random();
+    setState(() {
+      _width = random.nextInt(300).toDouble();
+      _height = random.nextInt(300).toDouble();
+      _color = Color.fromRGBO(
+        random.nextInt(255),
+        random.nextInt(255),
+        random.nextInt(255),
+        1,
+      );
+      _borderRadius = BorderRadius.circular(random.nextInt(100).toDouble());
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Contenidor Animat'),
+      ),
+      body: Center(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.fastOutSlowIn,
+          width: _width,
+          height: _height,
+          decoration: BoxDecoration(
+            borderRadius: _borderRadius,
+            color: _color,
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _randomContainer,
+        child: const Icon(Icons.play_arrow),
+      ),
+    );
+  }
+}</code></pre>
+            </details>
+        </div>
+
+        <!-- 5. INPUTS -->
+        <div class="step-box">
+            <div class="step-title">📍 5. Inputs i Formularis (inputs_screen.dart)</div>
+            <div class="tutorial-grid">
+                <div>
+                    <p>A <code>lib/src/screens/inputs_screen.dart</code> desenvoluparem un formulari complet de captura de dades:</p>
+                    <ul>
+                        <li><strong>TextField de Nom:</strong> Amb <code>textCapitalization: TextCapitalization.sentences</code>, comptador dinàmic de caràcters (<code>counter: Text('Lletres ${_nom.length}')</code>) i actualització de la variable <code>_nom</code> amb <code>onChanged</code>.</li>
+                        <li><strong>TextField de Correu:</strong> Amb <code>keyboardType: TextInputType.emailAddress</code> i icona d'email.</li>
+                        <li><strong>TextField de Contrasenya:</strong> Amb <code>obscureText: true</code> per ocultar els caràcters introduïts.</li>
+                        <li><strong>Input de Data (DatePicker):</strong> Vinculat a un <code>TextEditingController</code>. En fer clic (<code>onTap</code>), treu el focus del teclat amb <code>FocusScope.of(context).requestFocus(FocusNode())</code> i obre el diàleg de calendari <code>showDatePicker()</code>.</li>
+                        <li><strong>DropdownButton de Països:</strong> Desplegable d'opcions envoltat en un <code>Row</code> amb <code>Expanded</code> per adaptar-se a l'amplada disponible.</li>
+                        <li><strong>Resum en temps real (_crearPersona()):</strong> Un widget <code>ListTile</code> situat al final de la pantalla que mostra el Nom, Correu i País seleccionat, <strong>actualitzant-se immediatament</strong> en temps real gràcies al <code>setState()</code> de cada camp.</li>
+                    </ul>
+                </div>
+                <div class="phone-mockup">
+                    <div class="screen">
+                        <div class="app-bar-mock"><span>Inputs</span></div>
+                        <div class="screen-body" style="gap: 4px; font-size: 0.6rem;">
+                            <div style="border: 1px solid #999; border-radius: 8px; padding: 3px 6px;">Nom: Jaume</div>
+                            <div style="border: 1px solid #999; border-radius: 8px; padding: 3px 6px;">Correu electrònic</div>
+                            <div style="border: 1px solid #999; border-radius: 8px; padding: 3px 6px;">Password (•••••)</div>
+                            <div style="border: 1px solid #999; border-radius: 8px; padding: 3px 6px;">Data naixement 📅</div>
+                            <div style="border: 1px solid #999; border-radius: 8px; padding: 3px 6px;">🌐 Andorra ▾</div>
+                            <div style="margin-top: 6px; background: #EADDFF; padding: 6px; border-radius: 6px; color: #21005D;">
+                                <strong>Nom:</strong> Jaume<br>
+                                <strong>Correu:</strong> user@test.com<br>
+                                <strong>País:</strong> Andorra
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/screens/inputs_screen.dart</code></summary>
+<pre><code>import 'package:flutter/material.dart';
+
+class InputsScreen extends StatefulWidget {
+  const InputsScreen({super.key});
+
+  @override
+  State&lt;InputsScreen&gt; createState() =&gt; _InputsScreenState();
+}
+
+class _InputsScreenState extends State&lt;InputsScreen&gt; {
+  String _nom = '';
+  String _email = '';
+  String _data = '';
+  String _pais = 'Andorra';
+
+  final List&lt;String&gt; _paisos = ['Andorra', 'Anglaterra', 'Dinamarca', 'Espanya', 'França'];
+  final TextEditingController _inputFieldDataController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Inputs'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+        children: [
+          _crearInput(),
+          const Divider(),
+          _crearEmail(),
+          const Divider(),
+          _crearPassword(),
+          const Divider(),
+          _crearData(context),
+          const Divider(),
+          _crearDropdown(),
+          const Divider(),
+          _crearPersona(),
+        ],
+      ),
+    );
+  }
+
+  Widget _crearInput() {
+    return TextField(
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        counter: Text('Lletres ${_nom.length}'),
+        hintText: 'Nom de l\'usuari',
+        labelText: 'Nom',
+        helperText: 'Posi el nom complet',
+        suffixIcon: const Icon(Icons.accessibility),
+        icon: const Icon(Icons.account_circle),
+      ),
+      onChanged: (valor) {
+        setState(() {
+          _nom = valor;
+        });
+      },
+    );
+  }
+
+  Widget _crearEmail() {
+    return TextField(
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        hintText: 'Correu electrònic',
+        labelText: 'Correu electrònic',
+        suffixIcon: const Icon(Icons.alternate_email),
+        icon: const Icon(Icons.email),
+      ),
+      onChanged: (valor) =&gt; setState(() {
+        _email = valor;
+      }),
+    );
+  }
+
+  Widget _crearPassword() {
+    return TextField(
+      obscureText: true,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        hintText: 'Password',
+        labelText: 'Password',
+        suffixIcon: const Icon(Icons.lock_open),
+        icon: const Icon(Icons.lock),
+      ),
+      onChanged: (valor) {},
+    );
+  }
+
+  Widget _crearData(BuildContext context) {
+    return TextField(
+      enableInteractiveSelection: false,
+      controller: _inputFieldDataController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        hintText: 'Data naixement',
+        labelText: 'Data naixement',
+        suffixIcon: const Icon(Icons.perm_contact_calendar),
+        icon: const Icon(Icons.calendar_today),
+      ),
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+        _seleccionaData(context);
+      },
+    );
+  }
+
+  void _seleccionaData(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+      locale: const Locale('es', 'ES'),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _data = picked.toString().split(' ')[0];
+        _inputFieldDataController.text = _data;
+      });
+    }
+  }
+
+  List&lt;DropdownMenuItem&lt;String&gt;&gt; getOptionDropdown() {
+    List&lt;DropdownMenuItem&lt;String&gt;&gt; llista = [];
+    for (var pais in _paisos) {
+      llista.add(DropdownMenuItem(
+        child: Text(pais),
+        value: pais,
+      ));
+    }
+    return llista;
+  }
+
+  Widget _crearDropdown() {
+    return Row(
+      children: [
+        const Icon(Icons.language),
+        const SizedBox(width: 30.0),
+        Expanded(
+          child: DropdownButton(
+            value: _pais,
+            items: getOptionDropdown(),
+            onChanged: (opcio) {
+              setState(() {
+                _pais = opcio as String;
+              });
+            },
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _crearPersona() {
+    return ListTile(
+      title: Text('Nom: $_nom'),
+      subtitle: Text('Correu: $_email'),
+      trailing: Text(_pais),
+    );
+  }
+}</code></pre>
+            </details>
+        </div>
+
+        <!-- 6. SLIDERS -->
+        <div class="step-box">
+            <div class="step-title">📍 6. Sliders i Checks (slider_screen.dart)</div>
+            <div class="tutorial-grid">
+                <div>
+                    <p>A <code>lib/src/screens/slider_screen.dart</code> enllaçarem controls de selecció amb la mida d'una imatge:</p>
+                    <ul>
+                        <li>Crea un <code>Slider</code> amb <code>min: 10.0</code> i <code>max: 400.0</code> que modifiqui el valor de la variable <code>_valorSlider</code>.</li>
+                        <li>Afegeix un <code>CheckboxListTile</code> i un <code>SwitchListTile</code> associats a la variable booleana <code>_valorCheckBox</code>.</li>
+                        <li><strong>Bloqueig interactiu:</strong> Si la variable booleana <code>_valorCheckBox</code> està activada (<code>true</code>), el paràmetre <code>onChanged</code> del Slider rep <code>null</code>, deshabilitant la barra horitzontal.</li>
+                    </ul>
+                </div>
+                <div class="phone-mockup">
+                    <div class="screen">
+                        <div class="app-bar-mock"><span>Sliders</span></div>
+                        <div class="screen-body" style="align-items: center;">
+                            <div style="width: 80%; height: 6px; background: #EADDFF; border-radius: 3px; position: relative; margin-top: 10px;">
+                                <div style="width: 14px; height: 14px; background: #6750A4; border-radius: 50%; position: absolute; top: -4px; left: 50%;"></div>
+                            </div>
+                            <div style="font-size: 0.6rem; margin-top: 10px; width: 100%;">
+                                ☑ Bloquejar Slider<br>
+                                🔘 Bloquejar Slider
+                            </div>
+                            <div style="font-size: 2rem; margin-top: 15px;">🖼️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/screens/slider_screen.dart</code></summary>
+<pre><code>import 'package:flutter/material.dart';
+
+class SliderScreen extends StatefulWidget {
+  const SliderScreen({super.key});
+
+  @override
+  State&lt;SliderScreen&gt; createState() =&gt; _SliderScreenState();
+}
+
+class _SliderScreenState extends State&lt;SliderScreen&gt; {
+  double _valorSlider = 100.0;
+  bool _valorCheckBox = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sliders'),
+      ),
+      body: Container(
+        padding: const EdgeInsets.only(top: 50.0),
+        child: Column(
+          children: [
+            _crearSlider(),
+            _crearCheckBox(),
+            _crearSwitch(),
+            Expanded(child: _crearImatge()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _crearSlider() {
+    return Slider(
+      activeColor: Colors.indigo,
+      label: 'Grandària de la imatge',
+      // divisions: 20,
+      value: _valorSlider,
+      min: 10.0,
+      max: 400.0,
+      onChanged: (_valorCheckBox)
+          ? null
+          : (valor) {
+              setState(() {
+                _valorSlider = valor;
+              });
+            },
+    );
+  }
+
+  Widget _crearCheckBox() {
+    return CheckboxListTile(
+      title: const Text('Bloquejar Slider'),
+      value: _valorCheckBox,
+      onChanged: (estat) {
+        setState(() {
+          _valorCheckBox = estat ?? false;
+        });
+      },
+    );
+  }
+
+  Widget _crearSwitch() {
+    return SwitchListTile(
+      title: const Text('Bloquejar Slider'),
+      value: _valorCheckBox,
+      onChanged: (estat) {
+        setState(() {
+          _valorCheckBox = estat;
+        });
+      },
+    );
+  }
+
+  Widget _crearImatge() {
+    return Image(
+      image: const NetworkImage('https://p.kindpng.com/picc/s/176-1766643_come-to-the-dart-side-flutter-custom-bottom.png'),
+      width: _valorSlider,
+      fit: BoxFit.contain,
+    );
+  }
+}</code></pre>
+            </details>
+        </div>
+
+        <!-- 7. LISTVIEW & SCROLL -->
+        <div class="step-box">
+            <div class="step-title">📍 7. Llistes i Scroll Infinit (listview_screen.dart)</div>
+            <div class="tutorial-grid">
+                <div>
+                    <p>A <code>lib/src/screens/listview_screen.dart</code> implementarem un carregament dinàmic d'imatges amb scroll infinit:</p>
+                    <ul>
+                        <li>Utilitza el constructor optimitzat <code>ListView.builder</code> en lloc del <code>ListView</code> estàndard.</li>
+                        <li>Associa un <code>ScrollController</code>. Dins de <code>initState()</code>, afegeix un listener al controller per carregar automàticament nous registres (<code>fetchData()</code>) quan l'usuari arriba al final de la pàgina.</li>
+                        <li>Simula la petició HTTP asíncrona utilitzant un <code>Timer</code> de 2 segons i dibuixa un <code>CircularProgressIndicator</code> sobreposat a la pantalla amb un widget <code>Stack</code>.</li>
+                        <li><strong>GESTIÓ DE MEMÒRIA OBLIGATÒRIA:</strong> Sobreescriu el mètode <code>dispose()</code> per destruir el controlador (<code>_scrollController.dispose()</code>) quan l'usuari tanca la pantalla.</li>
+                        <li>Embolcalla el <code>ListView.builder</code> amb un widget <code>RefreshIndicator</code> per permetre el gest de recàrrega cap avall (<em>pull-to-refresh</em>).</li>
+                    </ul>
+                </div>
+                <div class="phone-mockup">
+                    <div class="screen">
+                        <div class="app-bar-mock"><span>Llistes</span></div>
+                        <div class="screen-body" style="padding: 0; position: relative;">
+                            <div style="height: 100px; background: #ddd; margin-bottom: 2px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem;">🖼️ Img PicSum</div>
+                            <div style="height: 100px; background: #ccc; margin-bottom: 2px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem;">🖼️ Img PicSum</div>
+                            <div style="position: absolute; bottom: 10px; left: 42%; font-size: 1.2rem;">🔄</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/screens/listview_screen.dart</code></summary>
+<pre><code>import 'dart:async';
+import 'package:flutter/material.dart';
+
+class ListViewScreen extends StatefulWidget {
+  const ListViewScreen({super.key});
+
+  @override
+  State&lt;ListViewScreen&gt; createState() =&gt; _ListViewScreenState();
+}
+
+class _ListViewScreenState extends State&lt;ListViewScreen&gt; {
+  final List&lt;int&gt; _llistaNombres = [];
+  int _darrerItem = 0;
+  bool _estaCarregant = false;
+
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _carregaNou();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        fetchData();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _carregaNou() {
+    for (int i = 0; i &lt; 5; i++) {
+      _llistaNombres.add(_darrerItem);
+      _darrerItem++;
+    }
+    setState(() {});
+  }
+
+  Future&lt;Timer&gt; fetchData() async {
+    _estaCarregant = true;
+    setState(() {});
+    const duration = Duration(seconds: 2);
+    return Timer(duration, peticioHTTP);
+  }
+
+  void peticioHTTP() {
+    _estaCarregant = false;
+    _carregaNou();
+    _scrollController.animateTo(
+      _scrollController.position.pixels + 100,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  Future&lt;void&gt; obtenirPagina() async {
+    const duration = Duration(seconds: 2);
+    Timer(duration, () {
+      _llistaNombres.clear();
+      _darrerItem++;
+      _carregaNou();
+    });
+    return Future.delayed(duration);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Llistes y Scroll')),
+      body: Stack(
+        children: [
+          _crearLlista(),
+          _crearLoading(),
+        ],
+      ),
+    );
+  }
+
+  Widget _crearLlista() {
+    return RefreshIndicator(
+      onRefresh: obtenirPagina,
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: _llistaNombres.length,
+        itemBuilder: (context, index) {
+          final imatge = _llistaNombres[index];
+          return FadeInImage(
+            placeholder: const AssetImage('assets/jar-loading.gif'),
+            image: NetworkImage('https://picsum.photos/id/$imatge/500/400'),
+            height: 250,
+            fit: BoxFit.cover,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _crearLoading() {
+    if (_estaCarregant) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              CircularProgressIndicator(),
+            ],
+          ),
+          const SizedBox(height: 15.0)
+        ],
+      );
+    } else {
+      return Container();
+    }
+  }
+}</code></pre>
+            </details>
+        </div>
+    </section>
+
+    <!-- BLOC 3: NAVEGACIÓ CENTRALITZADA (ROUTES) I MAIN.DART -->
+    <section>
+        <h2>Bloc 3: Mapa de Rutes Centralitzat (routes.dart) i main.dart</h2>
+
+        <div class="step-box">
+            <div class="step-title">📍 Pas Final: Mapeig de Rutes i Localització a main.dart</div>
+            <p>1. A <code>lib/src/routes/routes.dart</code>, importa les 8 pantalles de la carpeta <code>screens/</code> i defineix el mapa de rutes nombrades:</p>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/src/routes/routes.dart</code></summary>
+<pre><code>import 'package:flutter/material.dart';
+import '../screens/alert_screen.dart';
+import '../screens/animated_container_screen.dart';
+import '../screens/avatar_screen.dart';
+import '../screens/card_screen.dart';
+import '../screens/home_screen.dart';
+import '../screens/inputs_screen.dart';
+import '../screens/listview_screen.dart';
+import '../screens/slider_screen.dart';
+
+Map&lt;String, WidgetBuilder&gt; getRoutes() {
+  return &lt;String, WidgetBuilder&gt;{
+    '/': (BuildContext context) =&gt; const HomeScreen(),
+    'alert': (BuildContext context) =&gt; const AlertScreen(),
+    'avatar': (BuildContext context) =&gt; const AvatarScreen(),
+    'card': (BuildContext context) =&gt; const CardScreen(),
+    'animatedContainer': (BuildContext context) =&gt; const AnimatedContainerScreen(),
+    'inputs': (BuildContext context) =&gt; const InputsScreen(),
+    'slider': (BuildContext context) =&gt; const SliderScreen(),
+    'list': (BuildContext context) =&gt; const ListViewScreen(),
+  };
+}</code></pre>
+            </details>
+
+            <p>2. A <code>lib/main.dart</code>, configura el mapa de rutes, el gestor de rutes no trobades (<code>onGenerateRoute</code>) i la localització en espanyol per als diàlegs de calendari (<code>flutter_localizations</code>):</p>
+
+            <details>
+                <summary>🔍 Codi de verificació: <code>lib/main.dart</code></summary>
+<pre><code>import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'src/screens/alert_screen.dart';
+import 'src/routes/routes.dart';
+
+void main() =&gt; runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Components App',
+      initialRoute: '/',
+      routes: getRoutes(),
+      onGenerateRoute: (RouteSettings settings) {
+        return MaterialPageRoute(
+          builder: (BuildContext context) =&gt; const AlertScreen(),
+        );
+      },
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('es', ''),
+      ],
+    );
+  }
+}</code></pre>
+            </details>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>
