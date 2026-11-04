@@ -6,18 +6,23 @@
     <title>PMDM - Programació Multimèdia i Dispositius Mòbils</title>
     <style>
         :root {
-            --primary-color: #02569B;
-            --secondary-color: #0175C2;
-            --accent-color: #13B9FD;
-            --bg-color: #F8F9FA;
+            --primary: #6750A4;
+            --on-primary: #FFFFFF;
+            --primary-container: #EADDFF;
+            --on-primary-container: #21005D;
+            --secondary: #625B71;
+            --surface: #FEF7FF;
+            --on-surface: #1D1B20;
+            --surface-variant: #E7E0EC;
+            --outline: #79747E;
+            --bg-color: #F4F0F8;
             --card-bg: #FFFFFF;
-            --text-color: #202124;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--on-surface);
             margin: 0;
             padding: 20px;
             line-height: 1.6;
@@ -26,18 +31,18 @@
         header {
             text-align: center;
             padding: 40px 20px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--primary), #4F378B);
             color: white;
-            border-radius: 12px;
+            border-radius: 16px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(103, 80, 164, 0.2);
         }
 
-        h1 { margin: 0 0 10px 0; font-size: 2.5rem; }
-        p.subtitle { margin: 0; font-size: 1.2rem; opacity: 0.9; }
+        h1 { margin: 0 0 10px 0; font-size: 2.3rem; }
+        p.subtitle { margin: 0; font-size: 1.15rem; opacity: 0.95; }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -49,11 +54,11 @@
 
         .card {
             background-color: var(--card-bg);
-            border-radius: 8px;
+            border-radius: 16px;
             padding: 25px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
             transition: transform 0.2s, box-shadow 0.2s;
-            border-left: 5px solid var(--accent-color);
+            border-left: 6px solid var(--primary);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -61,27 +66,27 @@
 
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 24px rgba(103, 80, 164, 0.15);
         }
 
         .card h2 {
             margin-top: 0;
-            color: var(--primary-color);
+            color: var(--primary);
             font-size: 1.3rem;
         }
 
         .card p {
-            color: #5f6368;
+            color: var(--secondary);
             font-size: 0.95rem;
             flex-grow: 1;
         }
 
         .btn {
             display: inline-block;
-            background-color: var(--secondary-color);
+            background-color: var(--primary);
             color: white;
             padding: 10px 18px;
-            border-radius: 6px;
+            border-radius: 20px;
             text-decoration: none;
             font-weight: bold;
             text-align: center;
@@ -90,7 +95,7 @@
         }
 
         .btn:hover {
-            background-color: var(--primary-color);
+            background-color: #4F378B;
         }
     </style>
 </head>
@@ -125,9 +130,9 @@
             <div class="card">
                 <div>
                     <h2>Tema 3: Pub.dev i gestió d'estats</h2>
-                    <p>Ús de llibreries externes de Pub.dev i patrons de gestió d'estat (Provider, Riverpod o BLoC) per a aplicacions escalables.</p>
+                    <p>Ús de llibreries externes de Pub.dev i patrons de gestió d'estat (Provider i Riverpod) per a aplicacions escalables.</p>
                 </div>
-                <a href="#" class="btn" style="opacity:0.6; pointer-events:none;">En construcció</a>
+                <a href="tema_3.html" class="btn">Accedir al Tema 3</a>
             </div>
 
             <!-- Tema 4 -->
