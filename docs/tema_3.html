@@ -548,6 +548,59 @@ class PantallaContadorRiverpod extends ConsumerWidget {
     );
   }
 }</code></pre>
+<p>En utilitzar Riverpod per a la gestió d'estat complexa, hem de triar la classe base adequada segons si la lògica és <strong>síncrona o asíncrona</strong> i si necessita <strong>rebre paràmetres (.family)</strong> des de la interfície.</p>
+
+    <div class="table-responsive my-4">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Classe Base</th>
+                    <th>És Asíncron? (API/DB)</th>
+                    <th>Rep Paràmetres? (.family)</th>
+                    <th>Estat gestionat</th>
+                    <th>Exemple d'ús típic</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>Notifier&lt;T&gt;</code></td>
+                    <td>❌ No (Síncron)</td>
+                    <td>❌ No</td>
+                    <td><code>T</code></td>
+                    <td>Comptador simple, selector de tema.</td>
+                </tr>
+                <tr>
+                    <td><code>FamilyNotifier&lt;T, Arg&gt;</code></td>
+                    <td>❌ No (Síncron)</td>
+                    <td>✅ Sí</td>
+                    <td><code>T</code></td>
+                    <td>Comptador o estat associat a un ID concret.</td>
+                </tr>
+                <tr>
+                    <td><code>AsyncNotifier&lt;T&gt;</code></td>
+                    <td>✅ Sí (Asíncron)</td>
+                    <td>❌ No</td>
+                    <td><code>AsyncValue&lt;T&gt;</code></td>
+                    <td>Carregar el perfil de l'usuari actual connectat.</td>
+                </tr>
+                <tr>
+                    <td><code>FamilyAsyncNotifier&lt;T, Arg&gt;</code></td>
+                    <td>✅ Sí (Asíncron)</td>
+                    <td>✅ Sí</td>
+                    <td><code>AsyncValue&lt;T&gt;</code></td>
+                    <td>Carregar un detall d'element per ID (<code>/users/:id</code>).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="info-box">
+        <strong>💡 Quin triar a la pràctica?</strong>
+        <ul>
+            <li>Si les dades venen d'un <code>Future</code> (API REST o SQLite) 👉 Utilitza <strong><code>AsyncNotifier</code></strong> o <strong><code>FamilyAsyncNotifier</code></strong>. Això et permetrà utilitzar <code>state.when(...)</code> a la UI per gestionar la càrrega i els errors automàticament.</li>
+            <li>Si l'estat és purament en memòria i no fa peticions asíncrones 👉 Utilitza <strong><code>Notifier</code></strong> o <strong><code>FamilyNotifier</code></strong>.</li>
+        </ul>
+    </div>
     </section>
 
     <!-- SECCIÓ 6: COMPARATIVA DE GESTORS D'ESTAT -->
