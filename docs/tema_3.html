@@ -593,6 +593,113 @@ class PantallaContadorRiverpod extends ConsumerWidget {
             </tbody>
         </table>
     </div>
+    <!-- EXEMPLES DE CODI PER CADASCUN -->
+    <h3 class="mt-4">1. Notifier&lt;T&gt; — Síncron i Sense Paràmetres</h3>
+    <p>Per a estats en memòria que s'inicialitzen de forma immediata.</p>
+<pre><code class="language-dart">import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class ContadorNotifier extends Notifier&lt;int&gt; {
+  @override
+  int build() {
+    return 0; // Estat inicial síncron
+  }
+
+  void incrementar() => state++;
+  void reiniciar() => state = 0;
+}
+
+final contadorProvider = NotifierProvider&lt;ContadorNotifier, int&gt;(() {
+  return ContadorNotifier();
+});</code></pre>
+
+    <h3 class="mt-4">2. FamilyNotifier&lt;T, Arg&gt; — Síncron i Amb Paràmetres (.family)</h3>
+    <p>Quan la UI ha de passar un paràmetre (com un ID) per obtenir o gestionar un estat síncron independent.</p>
+<pre><code class="language-dart">import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Primer tipus: Estat (int) | Segon tipus: Paràmetre d'entrada (String productId)
+class QuantitatProducteNotifier extends FamilyNotifier&lt;int, String&gt; {
+  @override
+  int build(String arg) {
+    // 'arg' conté el productId passat des de la UI
+    return 1; // Quantitat inicial per defecte d'aquest producte
+  }
+
+  void incrementar() => state++;
+  void decrementar() {
+    if (state > 1) state--;
+  }
+}
+
+final quantitatProducteProvider =
+    NotifierProvider.family&lt;QuantitatProducteNotifier, int, String&gt;(() {
+  return QuantitatProducteNotifier();
+});
+
+// Consum des de la UI: ref.watch(quantitatProducteProvider('PROD-101'))</code></pre>
+
+    <h3 class="mt-4">3. AsyncNotifier&lt;T&gt; — Asíncron i Sense Paràmetres</h3>
+    <p>Quan l'estat inicial depèn d'un <code>Future</code> (petició HTTP o base de dades local). Gestiona automàticament l'estat com a <code>AsyncValue&lt;T&gt;</code>.</p>
+<pre><code class="language-dart">import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class PerfilUsuariNotifier extends AsyncNotifier&lt;Map&lt;String, dynamic&gt;&gt; {
+  @override
+  Future&lt;Map&lt;String, dynamic&gt;&gt; build() async {
+    return _fetchPerfil(); // Càrrega asíncrona inicial
+  }
+
+  Future&lt;Map&lt;String, dynamic&gt;&gt; _fetchPerfil() async {
+    final response = await http.get(Uri.parse('https://api.example.com/me'));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    }
+    throw Exception('Error en carregar el perfil');
+  }
+}
+
+final perfilUsuariProvider =
+    AsyncNotifierProvider&lt;PerfilUsuariNotifier, Map&lt;String, dynamic&gt;&gt;(() {
+  return PerfilUsuariNotifier();
+});</code></pre>
+
+    <h3 class="mt-4">4. FamilyAsyncNotifier&lt;T, Arg&gt; — Asíncron i Amb Paràmetres (.family)</h3>
+    <p>El cas més habitual en aplicacions reals: fer peticions asíncrones a una API passant un paràmetre (ID o cerca).</p>
+<pre><code class="language-dart">import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+// Estat: Map<String, dynamic> | Paràmetre: int (userId)
+class DetallUsuariNotifier extends FamilyAsyncNotifier&lt;Map&lt;String, dynamic&gt;, int&gt; {
+  @override
+  Future&lt;Map&lt;String, dynamic&gt;&gt; build(int arg) async {
+    // 'arg' és l'ID de l'usuari rebut des de la UI
+    final response = await http.get(
+      Uri.parse('https://jsonplaceholder.typicode.com/users/$arg'),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    }
+    throw Exception('No s\'ha trobat l\'usuari amb ID: $arg');
+  }
+}
+
+final detallUsuariProvider = AsyncNotifierProvider.family&lt;
+    DetallUsuariNotifier, Map&lt;String, dynamic&gt;, int&gt;(() {
+  return DetallUsuariNotifier();
+});
+
+// Consum des de la UI utilitzant pattern matching (.when):
+/*
+final usuariAsync = ref.watch(detallUsuariProvider(5));
+
+return usuariAsync.when(
+  data: (usuari) => Text(usuari['name']),
+  loading: () => const CircularProgressIndicator(),
+  error: (err, stack) => Text('Error: $err'),
+);
+*/</code></pre>
 
     <div class="info-box">
         <strong>💡 Quin triar a la pràctica?</strong>
