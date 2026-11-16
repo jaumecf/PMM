@@ -105,6 +105,13 @@
             padding-bottom: 6px;
         }
 
+        h4 {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
         p, li {
             font-size: 1rem;
             color: #2D2D2D;
@@ -169,7 +176,7 @@
             font-family: 'Consolas', 'Courier New', monospace;
         }
 
-        p code, li code {
+        p code, li code, td code {
             background-color: #EAE6F0;
             padding: 2px 6px;
             border-radius: 4px;
@@ -478,7 +485,7 @@ void main() {
 }</code></pre>
     </section>
 
-    <!-- SECCIÓ 5: RIVERPOD -->
+    <!-- SECCIÓ 5: RIVERPOD (ACTUALITZADA A RIVERPOD 3.0 / @riverpod) -->
     <section>
         <h2>5. Riverpod: L'Evolució Moderna de Provider</h2>
         <p><strong>Riverpod</strong> és un re-disseny complet de Provider creat pel mateix autor (Remi Rousselet). Resol les restriccions històriques de dependre del <code>BuildContext</code>, evita errors d'injecció en temps d'execució i és completament segur en temps de compilació.</p>
@@ -492,222 +499,197 @@ void main() {
             </ul>
         </div>
 
-        <h3>1. Definir la lògica amb `Notifier` i `NotifierProvider`</h3>
-<pre><code class="language-dart">import 'package:flutter_riverpod/flutter_riverpod.dart';
+        <h3>5.1 Arrel de l'aplicació: `ProviderScope`</h3>
+        <p>Igual que Provider necessita un widget arrel, qualsevol aplicació que utilitzi Riverpod ha d'embolcallar el seu widget principal amb <strong><code>ProviderScope</code></strong>, que s'encarrega d'emmagatzemar l'estat de tots els providers:</p>
 
-// 1. Classe Notifier amb la lògica de negoci
-class ContadorNotifier extends Notifier&lt;int&gt; {
-  @override
-  int build() {
-    return 0; // Estat inicial
-  }
-
-  void incrementar() {
-    state++; // Modificació d'estat reactiu
-  }
-}
-
-// 2. Provider Global de Riverpod
-final contadorProvider = NotifierProvider&lt;ContadorNotifier, int&gt;(() {
-  return ContadorNotifier();
-});</code></pre>
-
-        <h3>2. Embolcallar l'aplicació amb `ProviderScope`</h3>
 <pre><code class="language-dart">import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   runApp(
-    // ProviderScope manté l'estat de tots els providers de Riverpod
     const ProviderScope(
       child: MyAppRiverpod(),
     ),
   );
 }</code></pre>
 
-        <h3>3. Consumir l'estat amb `ConsumerWidget` i `WidgetRef`</h3>
-<pre><code class="language-dart">// Subtituïm StatelessWidget per ConsumerWidget
-class PantallaContadorRiverpod extends ConsumerWidget {
-  const PantallaContadorRiverpod({super.key});
+        <h3>5.2 Les dues formes actuals de treballar amb Riverpod (Riverpod 3.0)</h3>
+        <p>En les versions modernes de Riverpod s'han eliminat les antigues classes separades per a paràmetres (com les obsoletes <code>FamilyNotifier</code> o <code>FamilyAsyncNotifier</code>). Avui dia existeixen <strong>dues aproximacions oficials</strong> per declarar els nostres gestors d'estat:</p>
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // ref.watch escolta el provider i redibuixa la interfície quan canvia
-    final valorContador = ref.watch(contadorProvider);
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Riverpod Demo')),
-      body: Center(
-        child: Text('Valor actual: $valorContador', style: const TextStyle(fontSize: 22)),
-      ),
-      floatingActionButton: FloatingActionButton(
-        // ref.read s'usa en esdeveniments per executar funcions del notifier
-        onPressed: () => ref.read(contadorProvider.notifier).incrementar(),
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}</code></pre>
-<p>En utilitzar Riverpod per a la gestió d'estat complexa, hem de triar la classe base adequada segons si la lògica és <strong>síncrona o asíncrona</strong> i si necessita <strong>rebre paràmetres (.family)</strong> des de la interfície.</p>
-
-    <div class="table-responsive my-4">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Classe Base</th>
-                    <th>És Asíncron? (API/DB)</th>
-                    <th>Rep Paràmetres? (.family)</th>
-                    <th>Estat gestionat</th>
-                    <th>Exemple d'ús típic</th>
+                    <th>Cas d'ús</th>
+                    <th>Opció A: Amb Generador (<code>@riverpod</code> - Recomanat)</th>
+                    <th>Opció B: Sense Generador (Riverpod 3.0)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><code>Notifier&lt;T&gt;</code></td>
-                    <td>❌ No (Síncron)</td>
-                    <td>❌ No</td>
-                    <td><code>T</code></td>
-                    <td>Comptador simple, selector de tema.</td>
+                    <td><strong>Síncron sense paràmetres</strong></td>
+                    <td><code>class MeuEstat extends _$MeuEstat</code><br><code>T build() => ...</code></td>
+                    <td><code>class MeuEstat extends Notifier&lt;T&gt;</code></td>
                 </tr>
                 <tr>
-                    <td><code>FamilyNotifier&lt;T, Arg&gt;</code></td>
-                    <td>❌ No (Síncron)</td>
-                    <td>✅ Sí</td>
-                    <td><code>T</code></td>
-                    <td>Comptador o estat associat a un ID concret.</td>
+                    <td><strong>Síncron amb paràmetres (<code>.family</code>)</strong></td>
+                    <td><code>class MeuEstat extends _$MeuEstat</code><br><code>T build(Arg arg) => ...</code></td>
+                    <td><code>class MeuEstat extends Notifier&lt;T&gt;</code><br><em>(Rep <code>Arg</code> al constructor)</em></td>
                 </tr>
                 <tr>
-                    <td><code>AsyncNotifier&lt;T&gt;</code></td>
-                    <td>✅ Sí (Asíncron)</td>
-                    <td>❌ No</td>
-                    <td><code>AsyncValue&lt;T&gt;</code></td>
-                    <td>Carregar el perfil de l'usuari actual connectat.</td>
+                    <td><strong>Asíncron sense paràmetres</strong></td>
+                    <td><code>class MeuEstat extends _$MeuEstat</code><br><code>Future&lt;T&gt; build() async => ...</code></td>
+                    <td><code>class MeuEstat extends AsyncNotifier&lt;T&gt;</code></td>
                 </tr>
                 <tr>
-                    <td><code>FamilyAsyncNotifier&lt;T, Arg&gt;</code></td>
-                    <td>✅ Sí (Asíncron)</td>
-                    <td>✅ Sí</td>
-                    <td><code>AsyncValue&lt;T&gt;</code></td>
-                    <td>Carregar un detall d'element per ID (<code>/users/:id</code>).</td>
+                    <td><strong>Asíncron amb paràmetres (<code>.family</code>)</strong></td>
+                    <td><code>class MeuEstat extends _$MeuEstat</code><br><code>Future&lt;T&gt; build(Arg arg) async => ...</code></td>
+                    <td><code>class MeuEstat extends AsyncNotifier&lt;T&gt;</code><br><em>(Rep <code>Arg</code> al constructor)</em></td>
                 </tr>
             </tbody>
         </table>
-    </div>
-    <!-- EXEMPLES DE CODI PER CADASCUN -->
-    <h3 class="mt-4">1. Notifier&lt;T&gt; — Síncron i Sense Paràmetres</h3>
-    <p>Per a estats en memòria que s'inicialitzen de forma immediata.</p>
-<pre><code class="language-dart">import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ContadorNotifier extends Notifier&lt;int&gt; {
+        <!-- OPCIÓ A: GENERACIÓ DE CODI -->
+        <h3>5.3 Opció A (Estàndard Recomanat): Generació de Codi amb `@riverpod`</h3>
+        <p>És la forma oficial recomanada per l'equip de Riverpod. El programador escriu una classe simple anotada amb <code>@riverpod</code> i una eina automàtica genera el codi repetitiu. Per fer-ho, cal entendre la diferència entre els paquets que s'instal·len:</p>
+
+        <div class="warning-box">
+            <strong>📦 Producció (<code>dependencies</code>) vs Desenvolupament (<code>dev_dependencies</code>):</strong>
+            <ul>
+                <li><strong><code>dependencies</code> (Producció):</strong> S'empaqueten dins l'aplicació final que instal·larà l'usuari al seu mòbil (<code>flutter_riverpod</code> i <code>riverpod_annotation</code>).</li>
+                <li><strong><code>dev_dependencies</code> (Desenvolupament <code>--dev</code>):</strong> Són eines que només s'executen al PC del programador mentre desenvolupa. No ocupen espai ni viatgen a l'APK/IPA final (<code>build_runner</code> i <code>riverpod_generator</code>).</li>
+            </ul>
+        </div>
+
+<pre><code class="language-bash"># 1. Instal·lació dels paquets (només un cop per projecte)
+flutter pub add flutter_riverpod riverpod_annotation
+flutter pub add --dev build_runner riverpod_generator
+
+# 2. Executar el vigilant en segon pla mentre programem
+dart run build_runner watch -d</code></pre>
+
+        <p><strong>Què fa <code>dart run build_runner watch -d</code>?</strong> Executa el motor de generació en mode vigilància (<code>watch</code>): cada vegada que guardem un fitxer (<code>Ctrl + S</code>), regenera automàticament el fitxer associat <code>.g.dart</code>. El paràmetre <code>-d</code> (<code>--delete-conflicting-outputs</code>) sobreescriu automàticament qualsevol fitxer generat antic sense aturar-se a demanar confirmació.</p>
+
+        <h4>1. Declaració del Provider (`usuari_provider.dart`)</h4>
+        <p>El generador dedueix automàticament tot el que necessita mirant el mètode <code>build()</code>: si retorna un <code>Future</code> crea un provider asíncron, i si rep paràmetres crea un <code>.family</code>. A més, transforma el nom de la classe (ex: <code>UsuariDetall</code>) en la variable global que usarem a la UI (<code>usuariDetallProvider</code>).</p>
+
+<pre><code class="language-dart">import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+// 1. Enllaç obligatori amb el fitxer que generarà build_runner
+part 'usuari_provider.g.dart';
+
+// 2. Exemple Síncron Simple -> Genera automàticament 'contadorProvider'
+@riverpod
+class Contador extends _$Contador {
   @override
-  int build() {
-    return 0; // Estat inicial síncron
-  }
+  int build() => 0;
 
   void incrementar() => state++;
-  void reiniciar() => state = 0;
 }
 
-final contadorProvider = NotifierProvider&lt;ContadorNotifier, int&gt;(() {
-  return ContadorNotifier();
-});</code></pre>
-
-    <h3 class="mt-4">2. FamilyNotifier&lt;T, Arg&gt; — Síncron i Amb Paràmetres (.family)</h3>
-    <p>Quan la UI ha de passar un paràmetre (com un ID) per obtenir o gestionar un estat síncron independent.</p>
-<pre><code class="language-dart">import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// Primer tipus: Estat (int) | Segon tipus: Paràmetre d'entrada (String productId)
-class QuantitatProducteNotifier extends FamilyNotifier&lt;int, String&gt; {
+// 3. Exemple Asíncron + Paràmetres (.family) -> Genera 'usuariDetallProvider(int userId)'
+@riverpod
+class UsuariDetall extends _$UsuariDetall {
   @override
-  int build(String arg) {
-    // 'arg' conté el productId passat des de la UI
-    return 1; // Quantitat inicial per defecte d'aquest producte
-  }
-
-  void incrementar() => state++;
-  void decrementar() {
-    if (state > 1) state--;
-  }
-}
-
-final quantitatProducteProvider =
-    NotifierProvider.family&lt;QuantitatProducteNotifier, int, String&gt;(() {
-  return QuantitatProducteNotifier();
-});
-
-// Consum des de la UI: ref.watch(quantitatProducteProvider('PROD-101'))</code></pre>
-
-    <h3 class="mt-4">3. AsyncNotifier&lt;T&gt; — Asíncron i Sense Paràmetres</h3>
-    <p>Quan l'estat inicial depèn d'un <code>Future</code> (petició HTTP o base de dades local). Gestiona automàticament l'estat com a <code>AsyncValue&lt;T&gt;</code>.</p>
-<pre><code class="language-dart">import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-class PerfilUsuariNotifier extends AsyncNotifier&lt;Map&lt;String, dynamic&gt;&gt; {
-  @override
-  Future&lt;Map&lt;String, dynamic&gt;&gt; build() async {
-    return _fetchPerfil(); // Càrrega asíncrona inicial
-  }
-
-  Future&lt;Map&lt;String, dynamic&gt;&gt; _fetchPerfil() async {
-    final response = await http.get(Uri.parse('https://api.example.com/me'));
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    }
-    throw Exception('Error en carregar el perfil');
-  }
-}
-
-final perfilUsuariProvider =
-    AsyncNotifierProvider&lt;PerfilUsuariNotifier, Map&lt;String, dynamic&gt;&gt;(() {
-  return PerfilUsuariNotifier();
-});</code></pre>
-
-    <h3 class="mt-4">4. FamilyAsyncNotifier&lt;T, Arg&gt; — Asíncron i Amb Paràmetres (.family)</h3>
-    <p>El cas més habitual en aplicacions reals: fer peticions asíncrones a una API passant un paràmetre (ID o cerca).</p>
-<pre><code class="language-dart">import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-// Estat: Map<String, dynamic> | Paràmetre: int (userId)
-class DetallUsuariNotifier extends FamilyAsyncNotifier&lt;Map&lt;String, dynamic&gt;, int&gt; {
-  @override
-  Future&lt;Map&lt;String, dynamic&gt;&gt; build(int arg) async {
-    // 'arg' és l'ID de l'usuari rebut des de la UI
+  Future&lt;Map&lt;String, dynamic&gt;&gt; build(int userId) async {
     final response = await http.get(
-      Uri.parse('https://jsonplaceholder.typicode.com/users/$arg'),
+      Uri.parse('https://jsonplaceholder.typicode.com/users/$userId'),
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      return jsonDecode(response.body) as Map&lt;String, dynamic&gt;;
     }
-    throw Exception('No s\'ha trobat l\'usuari amb ID: $arg');
+    throw Exception('Error carregant l\'usuari $userId');
+  }
+
+  // Mètode propi per recarregar les dades manualment
+  Future&lt;void&gt; recarregar() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build(userId));
+  }
+}</code></pre>
+
+        <h4>2. Com es consumeix a la UI (`detall_usuari_screen.dart`)</h4>
+        <p>A la interfície substitutïm <code>StatelessWidget</code> per <strong><code>ConsumerWidget</code></strong>, el qual ens proporciona l'objecte <code>WidgetRef ref</code> per interactuar amb la variable generada (<code>usuariDetallProvider</code>):</p>
+
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'usuari_provider.dart';
+
+class DetallUsuariScreen extends ConsumerWidget {
+  final int userId;
+  const DetallUsuariScreen({super.key, required this.userId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 1. ref.watch() escolta els canvis. Li passem (userId) perquè build() ho demana.
+    // Retorna un AsyncValue&lt;Map&lt;String, dynamic&gt;&gt;
+    final usuariAsync = ref.watch(usuariDetallProvider(userId));
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Perfil Usuari #$userId'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            // 2. ref.read(...notifier) permet cridar mètodes de la classe
+            onPressed: () => ref.read(usuariDetallProvider(userId).notifier).recarregar(),
+          ),
+        ],
+      ),
+      // 3. El mètode .when() gestiona de forma neta els 3 estats possibles de la petició
+      body: Center(
+        child: usuariAsync.when(
+          loading: () => const CircularProgressIndicator(),
+          error: (error, stack) => Text('Error: $error', style: const TextStyle(color: Colors.red)),
+          data: (usuari) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(usuari['name'], style: Theme.of(context).textTheme.headlineMedium),
+              const SizedBox(height: 8),
+              Text(usuari['email']),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}</code></pre>
+
+        <!-- OPCIÓ B: SENSE GENERADOR -->
+        <h3>5.4 Opció B: Sense Generació de Codi (Riverpod 3.0 Manual)</h3>
+        <p>Si es prefereix evitar l'ús de <code>build_runner</code> i els fitxers <code>.g.dart</code>, a Riverpod 3.0 només cal utilitzar dues classes base: <strong><code>Notifier&lt;T&gt;</code></strong> (per a dades síncrones) i <strong><code>AsyncNotifier&lt;T&gt;</code></strong> (per a dades asíncrones). Quan necessitem rebre paràmetres (<code>.family</code>), simplement els passem pel <strong>constructor de la classe</strong>:</p>
+
+<pre><code class="language-dart">import 'dart:convert';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+
+// 1. Hereta directament d'AsyncNotifier (ja no existeix FamilyAsyncNotifier)
+class UsuariDetallManualNotifier extends AsyncNotifier&lt;Map&lt;String, dynamic&gt;&gt; {
+  // Rebem el paràmetre directament pel constructor
+  UsuariDetallManualNotifier(this.userId);
+  final int userId;
+
+  @override
+  Future&lt;Map&lt;String, dynamic&gt;&gt; build() async {
+    final response = await http.get(
+      Uri.parse('https://jsonplaceholder.typicode.com/users/$userId'),
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body) as Map&lt;String, dynamic&gt;;
+    }
+    throw Exception('Error carregant usuari $userId');
   }
 }
 
-final detallUsuariProvider = AsyncNotifierProvider.family&lt;
-    DetallUsuariNotifier, Map&lt;String, dynamic&gt;, int&gt;(() {
-  return DetallUsuariNotifier();
-});
-
-// Consum des de la UI utilitzant pattern matching (.when):
-/*
-final usuariAsync = ref.watch(detallUsuariProvider(5));
-
-return usuariAsync.when(
-  data: (usuari) => Text(usuari['name']),
-  loading: () => const CircularProgressIndicator(),
-  error: (err, stack) => Text('Error: $err'),
+// 2. Declarem el provider manualment passant el constructor (.new)
+final usuariDetallManualProvider = AsyncNotifierProvider.family&lt;
+    UsuariDetallManualNotifier, Map&lt;String, dynamic&gt;, int&gt;(
+  UsuariDetallManualNotifier.new,
 );
-*/</code></pre>
 
-    <div class="info-box">
-        <strong>💡 Quin triar a la pràctica?</strong>
-        <ul>
-            <li>Si les dades venen d'un <code>Future</code> (API REST o SQLite) 👉 Utilitza <strong><code>AsyncNotifier</code></strong> o <strong><code>FamilyAsyncNotifier</code></strong>. Això et permetrà utilitzar <code>state.when(...)</code> a la UI per gestionar la càrrega i els errors automàticament.</li>
-            <li>Si l'estat és purament en memòria i no fa peticions asíncrones 👉 Utilitza <strong><code>Notifier</code></strong> o <strong><code>FamilyNotifier</code></strong>.</li>
-        </ul>
-    </div>
+// El consum a la UI és idèntic: ref.watch(usuariDetallManualProvider(5)).when(...)</code></pre>
     </section>
 
     <!-- SECCIÓ 6: COMPARATIVA DE GESTORS D'ESTAT -->
