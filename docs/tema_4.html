@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema 4: Persistència de Dades i Serveis al Núvol - PMDM</title>
+    
+    <!-- Highlight.js amb el tema VS Code Dark Plus (vs2015) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <style>
+        :root {
+            --primary: #6750A4;
+            --on-primary: #FFFFFF;
+            --primary-container: #EADDFF;
+            --on-primary-container: #21005D;
+            --secondary: #625B71;
+            --surface: #FEF7FF;
+            --on-surface: #1D1B20;
+            --surface-variant: #E7E0EC;
+            --outline: #79747E;
+            --code-bg: #1E1E2E;
+            --code-color: #CDD6F4;
+            --accent-blue: #02569B;
+            --accent-cyan: #01B5D8;
+            --bg-color: #F4F0F8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--on-surface);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-container);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav-back:hover { text-decoration: underline; }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.3rem;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.15rem;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--on-primary-container);
+            background-color: var(--primary-container);
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 1.45rem;
+            margin-top: 40px;
+        }
+
+        h3 {
+            color: var(--primary);
+            font-size: 1.25rem;
+            margin-top: 25px;
+            border-bottom: 2px solid var(--surface-variant);
+            padding-bottom: 6px;
+        }
+
+        h4 {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        p, li {
+            font-size: 1rem;
+            color: #2D2D2D;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+        }
+
+        .info-box {
+            background-color: #F0F4FF;
+            border-left: 5px solid var(--accent-cyan);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background-color: #FFF4E5;
+            border-left: 5px solid #FF9800;
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        /* Grid Layout per a Widgets & Previews */
+        .widget-block {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 20px;
+            margin-bottom: 35px;
+            background: var(--surface);
+            border: 1px solid var(--surface-variant);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        @media (max-width: 850px) {
+            .widget-block {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .widget-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-color);
+            padding: 14px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.88rem;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        p code, li code, td code {
+            background-color: #EAE6F0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--on-primary-container);
+            font-size: 0.92em;
+        }
+
+        /* Mockups Visuals de Mòbil */
+        .phone-mockup {
+            width: 260px;
+            height: 390px;
+            background-color: #121212;
+            border-radius: 28px;
+            padding: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            margin: auto;
+            box-sizing: border-box;
+        }
+
+        .screen {
+            background-color: #FFFFFF;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            font-family: sans-serif;
+        }
+
+        .app-bar-mock {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 14px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .screen-body {
+            padding: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #FAF8FC;
+            overflow-y: auto;
+        }
+
+        .mock-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+            display: inline-block;
+            margin: 2px;
+        }
+        .mock-btn-filled { background: #6750A4; color: white; }
+        .mock-btn-tonal { background: #EADDFF; color: #21005D; }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid var(--surface-variant);
+            padding: 12px 15px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .data-table th {
+            background-color: var(--primary-container);
+            color: var(--on-primary-container);
+            font-weight: bold;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #FDFBFF;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="nav-back">&larr; Tornar a l'índex general</a>
+
+    <header>
+        <span class="badge">PMDM - Desenvolupament Mòbil</span>
+        <h1>Tema 4: Persistència de Dades i Serveis al Núvol</h1>
+        <p class="subtitle">Emmagatzematge local (SharedPreferences, SQLite), arquitectura reactiva amb Provider i ecosistema Firebase</p>
+    </header>
+
+    <!-- SECCIÓ 1: FONAMENTS DE LA PERSISTÈNCIA -->
+    <section>
+        <h2>1. Fonaments de la Persistència en Dispositius Mòbils</h2>
+        <p>Fins ara, totes les dades gestionades dins dels nostres widgets o gestors d'estat residien a la <strong>memòria RAM (memòria volàtil)</strong>. Quan l'usuari tanca l'aplicació o el sistema operatiu l'elimina per alliberar recursos, tota aquesta informació es perd.</p>
+
+        <div class="info-box">
+            <strong>📂 El Sistema de Fitxers i Sandbox:</strong>
+            <p>Per seguretat, tant Android com iOS aïllen cada aplicació dins d'un entorn tancat (<em>Sandbox</em>). Una app no pot accedir directament als fitxers d'una altra. Per obtenir les rutes del sistema de manera multiplataforma utilitzem el paquet oficial <code>path_provider</code>:</p>
+            <ul>
+                <li><strong>Temporary Directory (<code>getTemporaryDirectory()</code>):</strong> Emmagatzematge de memòria cau (<em>caché</em>) que el sistema operatiu pot esborrar automàticament si es queda sense espai.</li>
+                <li><strong>Application Documents Directory (<code>getApplicationDocumentsDirectory()</code>):</strong> Directori persistent per a dades generades per l'usuari que només s'esborren si es desinstal·la l'aplicació.</li>
+            </ul>
+        </div>
+
+        <h3>1.1 Serialització i Deserialització de Models</h3>
+        <p>Per desar un objecte de Dart en una base de dades local, un fitxer JSON o enviar-lo al núvol, cal convertir-lo a un format primitiu (<code>Map&lt;String, dynamic&gt;</code> o <code>String</code>). Aquest procés s'anomena <strong>serialització</strong>:</p>
+
+<pre><code class="language-dart">class Tasca {
+  final int? id;
+  final String titol;
+  final bool completada;
+
+  Tasca({this.id, required this.titol, this.completada = false});
+
+  // 1. Serialització: Objecte Dart -> Map (per a SQLite, Firestore o JSON)
+  Map&lt;String, dynamic&gt; toMap() {
+    return {
+      if (id != null) 'id': id,
+      'titol': titol,
+      // SQLite no té tipus boolean natiu: guardem 1 (true) o 0 (false)
+      'completada': completada ? 1 : 0,
+    };
+  }
+
+  // 2. Deserialització: Map -> Objecte Dart
+  factory Tasca.fromMap(Map&lt;String, dynamic&gt; map) {
+    return Tasca(
+      id: map['id'] as int?,
+      titol: map['titol'] as String,
+      completada: (map['completada'] == 1 || map['completada'] == true),
+    );
+  }
+}</code></pre>
+    </section>
+
+    <!-- SECCIÓ 2: SHARED PREFERENCES -->
+    <section>
+        <h2>2. Persistència Lleugera Clau-Valor: <code>shared_preferences</code></h2>
+        <p>El paquet <code>shared_preferences</code> embolcalla <code>SharedPreferences</code> a Android i <code>NSUserDefaults</code> a iOS. Està dissenyat per desar petits conjunts de dades primitives (<code>int</code>, <code>double</code>, <code>bool</code>, <code>String</code> i <code>List&lt;String&gt;</code>).</p>
+
+        <div class="warning-box">
+            <strong>🔐 Seguretat — Què NO s'ha de guardar mai a SharedPreferences?</strong>
+            <p><code>SharedPreferences</code> desa un fitxer XML/PLIST <strong>sense xifrar</strong> al dispositiu. Mai s'hi han d'emmagatzemar contrasenyes, tokens JWT de sessió o claus API. Per a dades sensibles cal utilitzar <code>flutter_secure_storage</code> (que utilitza Keystore a Android i Keychain a iOS).</p>
+        </div>
+
+        <h3>2.1 Integració Reactiva amb Provider (<code>ChangeNotifier</code>)</h3>
+        <p>Un patró molt habitual en aplicacions reals és combinar <code>SharedPreferences</code> amb un <code>ChangeNotifier</code> de <strong>Provider</strong> per persistir la configuració de l'usuari (per exemple, el tema fosc) i actualitzar tota la interfície automàticament:</p>
+
+        <div class="widget-block">
+            <div class="widget-info">
+                <h4>1. Instal·lació i Model d'Estat Persistent</h4>
+<pre><code class="language-bash">flutter pub add shared_preferences provider</code></pre>
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class PreferenciesProvider extends ChangeNotifier {
+  static const String _clauTemaFosc = 'es_tema_fosc';
+  bool _esTemaFosc = false;
+
+  bool get esTemaFosc => _esTemaFosc;
+
+  PreferenciesProvider() {
+    _carregarPreferencies();
+  }
+
+  // Llegeix del disc en arrencar l'aplicació
+  Future&lt;void&gt; _carregarPreferencies() async {
+    final prefs = await SharedPreferences.getInstance();
+    _esTemaFosc = prefs.getBool(_clauTemaFosc) ?? false;
+    notifyListeners();
+  }
+
+  // Desa al disc i notifica a la UI
+  Future&lt;void&gt; canviarTema(bool nouValor) async {
+    _esTemaFosc = nouValor;
+    notifyListeners(); // Resposta immediata a la UI
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_clauTemaFosc, nouValor);
+  }
+}</code></pre>
+            </div>
+            <div class="phone-mockup">
+                <div class="screen" style="background-color: #1E1E2E; color: white;">
+                    <div class="app-bar-mock" style="background-color: #381E72;"><span>Configuració App</span></div>
+                    <div class="screen-body" style="background-color: #141218; justify-content: center;">
+                        <div style="background: #2B2930; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 0.8rem; font-weight: bold; color: #E6E0E9;">Mode Fosc</div>
+                                <div style="font-size: 0.65rem; color: #CAC4D0;">Desat a disc</div>
+                            </div>
+                            <div style="width: 34px; height: 18px; background: #D0BCFF; border-radius: 10px; position: relative;">
+                                <div style="width: 14px; height: 14px; background: #381E72; border-radius: 50%; position: absolute; right: 2px; top: 2px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>2. Consum a l'arrel de l'aplicació (<code>MaterialApp</code>)</h4>
+<pre><code class="language-dart">void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => PreferenciesProvider(),
+      child: const LaMevaApp(),
+    ),
+  );
+}
+
+class LaMevaApp extends StatelessWidget {
+  const LaMevaApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final prefsProvider = context.watch&lt;PreferenciesProvider&gt;();
+
+    return MaterialApp(
+      theme: ThemeData.light(useMaterial3: true),
+      darkTheme: ThemeData.dark(useMaterial3: true),
+      themeMode: prefsProvider.esTemaFosc ? ThemeMode.dark : ThemeMode.light,
+      home: const PantallaConfiguracio(),
+    );
+  }
+}</code></pre>
+    </section>
+
+    <!-- SECCIÓ 3: SQLITE -->
+    <section>
+        <h2>3. Bases de Dades Relacionals Locals: SQLite (<code>sqflite</code>)</h2>
+        <p>Quan necessitem emmagatzemar milers de registres estructurats, fer cerques complexes, ordenacions o establir relacions entre taules (claus foranes), utilitzem <strong>SQLite</strong> mitjançant el paquet <code>sqflite</code>.</p>
+
+<pre><code class="language-bash">flutter pub add sqflite path</code></pre>
+
+        <h3>3.1 Patró Singleton i Gestió d'Esquema (<code>DatabaseHelper</code>)</h3>
+        <p>Obrir una connexió a la base de dades és una operació costosa. Per evitar bloquejos o corrupció de dades, s'aplica el <strong>patró Singleton</strong> per garantir una única instància de <code>Database</code> en tota l'aplicació:</p>
+
+<pre><code class="language-dart">import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'tasca_model.dart';
+
+class DatabaseHelper {
+  // Instància única (Singleton)
+  static final DatabaseHelper instance = DatabaseHelper._init();
+  static Database? _database;
+
+  DatabaseHelper._init();
+
+  Future&lt;Database&gt; get database async {
+    if (_database != null) return _database!;
+    _database = await _initDB('tasques_app.db');
+    return _database!;
+  }
+
+  Future&lt;Database&gt; _initDB(String filePath) async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, filePath);
+
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: _createDB,
+      onUpgrade: _upgradeDB,
+    );
+  }
+
+  // S'executa només la primera vegada que es crea la BD
+  Future&lt;void&gt; _createDB(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE tasques (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        titol TEXT NOT NULL,
+        completada INTEGER NOT NULL
+      )
+    ''');
+  }
+
+  // S'executa quan incrementem el número de 'version'
+  Future&lt;void&gt; _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion &lt; 2) {
+      await db.execute('ALTER TABLE tasques ADD COLUMN prioritat INTEGER DEFAULT 1');
+    }
+  }
+
+  // --- OPERACIONS CRUD SEGURES (Parametritzades) ---
+
+  Future&lt;int&gt; crearTasca(Tasca tasca) async {
+    final db = await instance.database;
+    return await db.insert('tasques', tasca.toMap());
+  }
+
+  Future&lt;List&lt;Tasca&gt;&gt; obtenirTotesLesTasques() async {
+    final db = await instance.database;
+    final resultat = await db.query('tasques', orderBy: 'id DESC');
+    return resultat.map((json) => Tasca.fromMap(json)).toList();
+  }
+
+  Future&lt;int&gt; actualitzarTasca(Tasca tasca) async {
+    final db = await instance.database;
+    return await db.update(
+      'tasques',
+      tasca.toMap(),
+      where: 'id = ?', // Prevenció d'SQL Injection
+      whereArgs: [tasca.id],
+    );
+  }
+
+  Future&lt;int&gt; eliminarTasca(int id) async {
+    final db = await instance.database;
+    return await db.delete(
+      'tasques',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+}</code></pre>
+
+        <h3>3.2 Desacoblament UI — SQLite amb <code>Provider</code></h3>
+        <p>Els widgets mai han de contenir sentències SQL. Creem un <code>TasquesProvider</code> que actua d'intermediari entre la base de dades i la interfície:</p>
+
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'database_helper.dart';
+import 'tasca_model.dart';
+
+class TasquesProvider extends ChangeNotifier {
+  List&lt;Tasca&gt; _tasques = [];
+  bool _carregant = false;
+
+  List&lt;Tasca&gt; get tasques => _tasques;
+  bool get carregant => _carregant;
+
+  Future&lt;void&gt; carregarTasques() async {
+    _carregant = true;
+    notifyListeners();
+
+    _tasques = await DatabaseHelper.instance.obtenirTotesLesTasques();
+
+    _carregant = false;
+    notifyListeners();
+  }
+
+  Future&lt;void&gt; afegirTasca(String titol) async {
+    final novaTasca = Tasca(titol: titol);
+    await DatabaseHelper.instance.crearTasca(novaTasca);
+    await carregarTasques(); // Refresca la llista des de SQLite
+  }
+
+  Future&lt;void&gt; esborrarTasca(int id) async {
+    await DatabaseHelper.instance.eliminarTasca(id);
+    _tasques.removeWhere((t) => t.id == id);
+    notifyListeners();
+  }
+}</code></pre>
+    </section>
+
+    <!-- SECCIÓ 4: ALTERNATIVES NOSQL / ORM -->
+    <section>
+        <h2>4. Bases de Dades NoSQL i ORMs Moderns en Local</h2>
+        <p>Escriure SQL manualment amb <code>sqflite</code> és potent però propens a errors de tipat en temps d'execució. L'ecosistema Flutter disposa d'alternatives modernes segons les necessitats del projecte:</p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Tecnologia</th>
+                    <th>Tipus</th>
+                    <th>Avantatge Principal</th>
+                    <th>Cas d'ús ideal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>sqflite</strong></td>
+                    <td>SQL Relacional</td>
+                    <td>Control total sobre SQL, estàndard consolidat i zero màgia oculta.</td>
+                    <td>Aplicacions amb consultes SQL complexes, <code>JOINs</code> o migracions manuals.</td>
+                </tr>
+                <tr>
+                    <td><strong>Drift</strong> (abans Moor)</td>
+                    <td>ORM Reactiu sobre SQLite</td>
+                    <td>Consultes verificades en temps de compilació i suport natiu per a <code>Streams</code>.</td>
+                    <td>Projectes mitjans/grans que requereixen seguretat de tipus i reactivitat SQL.</td>
+                </tr>
+                <tr>
+                    <td><strong>Hive CE / ObjectBox</strong></td>
+                    <td>NoSQL / Objectes</td>
+                    <td>Velocitat extrema (escrits en Dart/C++ natiu), sense necessitat de SQL.</td>
+                    <td>Memòria cau d'objectes, emmagatzematge ràpid de models sense relacions complexes.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- SECCIÓ 5: PERSISTÈNCIA AL NÚVOL: FIREBASE -->
+    <section>
+        <h2>5. Persistència al Núvol i BaaS: Firebase</h2>
+        <p><strong>Firebase</strong> és la plataforma <em>Backend-as-a-Service (BaaS)</em> de Google. Permet disposar d'autenticació, bases de dades en temps real, emmagatzematge de fitxers i notificacions sense haver de programar ni mantenir un servidor propi.</p>
+
+        <h3>5.1 Configuració Moderna amb FlutterFire CLI</h3>
+        <p>Actualment no cal copiar manualment fitxers JSON/PLIST per configurar Firebase. S'utilitza l'eina oficial <strong>FlutterFire CLI</strong>:</p>
+
+<pre><code class="language-bash"># 1. Instal·lar la CLI globalment i iniciar sessió a Google
+dart pub global activate flutterfire_cli
+firebase login
+
+# 2. Vincular el projecte Flutter amb Firebase (genera lib/firebase_options.dart)
+flutterfire configure
+
+# 3. Afegir els paquets necessaris
+flutter pub add firebase_core cloud_firestore firebase_auth</code></pre>
+
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}</code></pre>
+
+        <h3>5.2 Cloud Firestore vs. Firebase Realtime Database</h3>
+        <p>Firebase ofereix dues bases de dades NoSQL al núvol amb sincronització en temps real i suport <em>offline</em> automàtic, però amb arquitectures molt diferents:</p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Característica</th>
+                    <th>Cloud Firestore (Recomanada)</th>
+                    <th>Firebase Realtime Database</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Model de Dades</strong></td>
+                    <td><strong>Col·leccions i Documents</strong> (similars a JSON amb subcol·leccions).</td>
+                    <td>Un únic <strong>arbre JSON gegant</strong>.</td>
+                </tr>
+                <tr>
+                    <td><strong>Consultes i Filtres</strong></td>
+                    <td>Consultes compostes avançades (múltiples <code>where</code>, ordenació i paginació).</td>
+                    <td>Consultes limitades (només pots ordenar o filtrar per una propietat alhora).</td>
+                </tr>
+                <tr>
+                    <td><strong>Escalabilitat</strong></td>
+                    <td>Escalabilitat global automàtica. Les consultes escalen segons els resultats, no la mida de la BD.</td>
+                    <td>Requereix desnormalitzar molt les dades per evitar descarregar branques senceres.</td>
+                </tr>
+                <tr>
+                    <td><strong>Model de Facturació</strong></td>
+                    <td>Per <strong>nombre d'operacions</strong> (lectures, escriptures i esborrats).</td>
+                    <td>Per <strong>ample de banda</strong> (GB descarregats) i emmagatzematge.</td>
+                </tr>
+                <tr>
+                    <td><strong>Quan triar-la?</strong></td>
+                    <td>En el 90% dels projectes nous (apps socials, gestors, comerç electrònic).</td>
+                    <td>Apps amb moltíssimes escriptures petites i baixa latència (ex. telemetria IoT, presència online).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>5.3 Cloud Firestore + <code>StreamProvider</code> (Temps Real)</h3>
+        <p>A Firestore, les dades s'organitzen en <strong>Col·leccions</strong> (ex: <code>notes</code>) que contenen <strong>Documents</strong> (cada nota amb el seu <code>id</code> únic i camps). Utilitzant <code>snapshots()</code> obtenim un <code>Stream</code> que emet dades cada vegada que canvia la base de dades al núvol:</p>
+
+        <div class="widget-block">
+            <div class="widget-info">
+                <h4>Servei Firestore i Consum amb Provider</h4>
+<pre><code class="language-dart">import 'package:cloud_firestore/cloud_firestore.dart';
+
+class FirestoreService {
+  final CollectionReference _notesRef =
+      FirebaseFirestore.instance.collection('notes');
+
+  // Escolta en temps real ordenada per data
+  Stream&lt;QuerySnapshot&gt; getNotesStream(String uid) {
+    return _notesRef
+        .where('userId', isEqualTo: uid)
+        .orderBy('dataCreacio', descending: true)
+        .snapshots();
+  }
+
+  // Crear document nou
+  Future&lt;void&gt; afegirNota(String titol, String uid) {
+    return _notesRef.add({
+      'titol': titol,
+      'userId': uid,
+      'dataCreacio': FieldValue.serverTimestamp(),
+    });
+  }
+
+  // Eliminar document per ID
+  Future&lt;void&gt; eliminarNota(String docId) {
+    return _notesRef.doc(docId).delete();
+  }
+}</code></pre>
+            </div>
+            <div class="phone-mockup">
+                <div class="screen">
+                    <div class="app-bar-mock">
+                        <span>Cloud Firestore</span>
+                        <span style="font-size: 0.7rem; background: #4CAF50; padding: 2px 6px; border-radius: 8px;">LIVE</span>
+                    </div>
+                    <div class="screen-body">
+                        <div style="background: white; padding: 8px; border-radius: 8px; border-left: 4px solid #6750A4; box-shadow: 0 2px 4px rgba(0,0,0,0.06);">
+                            <div style="font-size: 0.75rem; font-weight: bold;">Preparar examen PMDM</div>
+                            <div style="font-size: 0.65rem; color: #666;">Sincronitzat fa 2s</div>
+                        </div>
+                        <div style="background: white; padding: 8px; border-radius: 8px; border-left: 4px solid #01B5D8; box-shadow: 0 2px 4px rgba(0,0,0,0.06);">
+                            <div style="font-size: 0.75rem; font-weight: bold;">Revisar Firestore Rules</div>
+                            <div style="font-size: 0.65rem; color: #666;">Sincronitzat al núvol</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>Connexió a la UI mitjançant <code>StreamProvider</code> de Provider</h4>
+<pre><code class="language-dart">// A l'arbre de widgets (o dins d'una pantalla autenticada):
+StreamProvider&lt;QuerySnapshot?&gt;(
+  create: (_) => FirestoreService().getNotesStream(usuariActual.uid),
+  initialData: null,
+  child: const LlistaNotesScreen(),
+)
+
+// Dins de LlistaNotesScreen:
+@override
+Widget build(BuildContext context) {
+  final snapshot = context.watch&lt;QuerySnapshot?&gt;();
+
+  if (snapshot == null) {
+    return const Center(child: CircularProgressIndicator());
+  }
+
+  final docs = snapshot.docs;
+  return ListView.builder(
+    itemCount: docs.length,
+    itemBuilder: (context, index) {
+      final data = docs[index].data() as Map&lt;String, dynamic&gt;;
+      return ListTile(
+        title: Text(data['titol'] ?? ''),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () => FirestoreService().eliminarNota(docs[index].id),
+        ),
+      );
+    },
+  );
+}</code></pre>
+
+        <h3>5.4 Firebase Authentication (<code>firebase_auth</code>)</h3>
+        <p><strong>Firebase Authentication</strong> gestiona tot el cicle d'identitat dels usuaris (registre, inici de sessió, recuperació de contrasenya, tokens JWT i renovació automàtica de sessió) mitjançant correu/contrasenya o proveïdors OAuth (Google, Apple, GitHub).</p>
+
+<pre><code class="language-dart">import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+class AuthProvider extends ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? _usuari;
+
+  User? get usuari => _usuari;
+  bool get estaAutenticat => _usuari != null;
+
+  AuthProvider() {
+    // Escolta contínuament si l'usuari inicia o tanca sessió
+    _auth.authStateChanges().listen((User? user) {
+      _usuari = user;
+      notifyListeners();
+    });
+  }
+
+  Future&lt;void&gt; iniciarSessio(String email, String password) async {
+    await _auth.signInWithEmailAndPassword(email: email, password: password);
+  }
+
+  Future&lt;void&gt; registrarUsuari(String email, String password) async {
+    await _auth.createUserWithEmailAndPassword(email: email, password: password);
+  }
+
+  Future&lt;void&gt; tancarSessio() async {
+    await _auth.signOut();
+  }
+}</code></pre>
+
+        <div class="warning-box">
+            <strong>🛡️ Regles de Seguretat a Firestore (Security Rules):</strong>
+            <p>Com que Flutter es connecta directament a Firestore sense passar per un servidor intermedi, la seguretat s'aplica al núvol mitjançant les <em>Security Rules</em>. Aquesta regla garanteix que cada usuari només pugui llegir i modificar les seves pròpies notes:</p>
+<pre><code class="language-dart">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /notes/{notaId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+  }
+}</code></pre>
+        </div>
+
+        <h3>5.5 Resum de Funcionalitats de l'Ecosistema Firebase per a Apps Mòbils</h3>
+        <p>Més enllà de la base de dades i l'autenticació, Firebase proporciona un conjunt de serveis integrats molt útils per al projecte final del mòdul:</p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Servei Firebase</th>
+                    <th>Paquet Flutter</th>
+                    <th>Funcionalitat Principal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Authentication</strong></td>
+                    <td><code>firebase_auth</code></td>
+                    <td>Registre, login (Email, Google, Apple), verificació de correu i gestió de sessió.</td>
+                </tr>
+                <tr>
+                    <td><strong>Cloud Firestore</strong></td>
+                    <td><code>cloud_firestore</code></td>
+                    <td>Base de dades NoSQL documental amb sincronització en temps real i memòria cau offline.</td>
+                </tr>
+                <tr>
+                    <td><strong>Cloud Storage</strong></td>
+                    <td><code>firebase_storage</code></td>
+                    <td>Emmagatzematge de fitxers pesants (fotos de perfil, àudios, PDFs) amb URLs de descàrrega segures.</td>
+                </tr>
+                <tr>
+                    <td><strong>Cloud Messaging (FCM)</strong></td>
+                    <td><code>firebase_messaging</code></td>
+                    <td>Enviament de notificacions <em>Push</em> gratuïtes a dispositius Android i iOS (individuals o per temes).</td>
+                </tr>
+                <tr>
+                    <td><strong>Crashlytics</strong></td>
+                    <td><code>firebase_crashlytics</code></td>
+                    <td>Monitorització d'errors i caigudes (<em>crashes</em>) en temps real amb la traça exacta de l'error en Dart.</td>
+                </tr>
+                <tr>
+                    <td><strong>Remote Config</strong></td>
+                    <td><code>firebase_remote_config</code></td>
+                    <td>Canviar paràmetres o activar funcionalitats (<em>feature flags</em>) de l'app remotament sense publicar una nova versió.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- SECCIÓ 6: ARQUITECTURA OFFLINE-FIRST I COMPARATIVA -->
+    <section>
+        <h2>6. Arquitectura <em>Offline-First</em> i Guia de Decisió</h2>
+        <p>En dispositius mòbils la connexió a Internet és inestable (túnels, modes avió, cobertura feble). Una aplicació professional aplica el principi <strong>Offline-First</strong>: la interfície sempre llegeix les dades des de l'emmagatzematge local (instantani) i un repositori s'encarrega de sincronitzar els canvis amb el servidor quan hi ha xarxa disponible.</p>
+
+        <div class="info-box">
+            <strong>💡 Avantatge de Cloud Firestore en aquest aspecte:</strong>
+            <p>Firestore inclou persistència <em>offline</em> activada per defecte a Android i iOS. Si l'usuari crea o modifica un document sense cobertura, Firestore l'aplica immediatament a la memòria cau local (actualitzant la UI a l'instant) i l'envia automàticament al núvol en recuperar la connexió.</p>
+        </div>
+
+        <h3>Taula Comparativa Global: Quina solució triar?</h3>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Tipus de Dada / Requisit</th>
+                    <th>Solució Recomanada</th>
+                    <th>Motiu Tècnic</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Preferències d'usuari (tema, idioma, notificacions)</td>
+                    <td><code>shared_preferences</code></td>
+                    <td>Accés senzill clau-valor amb mínima sobrecàrrega.</td>
+                </tr>
+                <tr>
+                    <td>Tokens JWT, claus secretes, PIN</td>
+                    <td><code>flutter_secure_storage</code></td>
+                    <td>Xifratge natiu per maquinari (Keystore / Keychain).</td>
+                </tr>
+                <tr>
+                    <td>Dades estructurades complexes 100% locals</td>
+                    <td><code>sqflite</code> o <code>Drift</code></td>
+                    <td>Consultes relacionals SQL ràpides sense dependre d'Internet.</td>
+                </tr>
+                <tr>
+                    <td>Dades compartides entre usuaris en temps real</td>
+                    <td><code>Cloud Firestore</code> + <code>Provider</code></td>
+                    <td>Sincronització automàtica multi-dispositiu i gestió d'estat reactiva.</td>
+                </tr>
+                <tr>
+                    <td>Imatges d'usuari, vídeos o documents PDF</td>
+                    <td><code>Firebase Storage</code></td>
+                    <td>Les bases de dades no s'han d'usar per guardar fitxers binaris pesants.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>
+
+</body>
+</html>
